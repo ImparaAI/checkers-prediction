@@ -1,13 +1,16 @@
-from flask import Flask
-import tensorflow
+from flask import Flask, request, jsonify
+from training.session import restarter as training_session_restarter
+from prediction import predictor
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-	hello = tensorflow.constant('Hello, TensorFlow!')
-	sess = tensorflow.Session()
-	return sess.run(hello)
+@app.route("/train", methods=['POST'])
+def train():
+	return jsonify({'id': training_session_restarter.restart(request.json)})
+
+@app.route("/predict", methods=['GET'])
+def predict():
+	return jsonify({'prediction': predictor.predict(request.json)})
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=80, debug=True)
