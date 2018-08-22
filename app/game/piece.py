@@ -18,12 +18,20 @@ class Piece(object):
 
 		for enemy_position in adjacent_enemy_positions:
 			enemy_piece = self.board.get_piece_by_position(enemy_position)
-			position_behind_enemy = enemy_piece.
+			position_behind_enemy = somehow_do_this()
+
+			if self.board.spot_is_open(position_behind_enemy):
+				capture_move_positions.push(position_behind_enemy)
+
+		return self.create_moves_from_new_positions(capture_move_positions)
 
 	def get_possible_positional_moves(self):
-		adjacent_positions = filter((lambda position: self.board.spot_is_open(position)), self.get_adjacent_positions())
+		new_positions = filter((lambda position: self.board.spot_is_open(position)), self.get_adjacent_positions())
 
-		return list(map((lambda new_position: [self.position, new_position]), new_positions))
+		return self.create_moves_from_new_positions(new_positions)
+
+	def create_moves_from_new_positions(self, new_positions):
+		return list(map((lambda new_position: [self.position, new_position]), new_positions));
 
 	def get_adjacent_positions(self):
 		return self.get_directional_adjacent_positions(forward = True) + (self.get_directional_adjacent_positions(forward = False) if self.king else [])
