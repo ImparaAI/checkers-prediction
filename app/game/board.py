@@ -69,9 +69,6 @@ class Board(object):
 	def spot_is_open(self, spot):
 		return spot in self.open_spots
 
-	def get_forward_diagonal_posiitons(self, piece):
-		current_row = ceil()
-
 	def create_new_board_from_move(self, move):
 		pass
 
