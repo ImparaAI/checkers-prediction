@@ -37,7 +37,7 @@ class Piece(object):
 			return []
 
 		left_position = current_column - 1 if current_column - 1 > 0 else None
-		right_position = current_column + 1 if current_column + 1 > 0 else None
+		right_position = current_column + 1 if current_column + 1 < self.board.width else None
 
 		if self.board.spot_is_open(left_position):
 			positions.push(left_position)
