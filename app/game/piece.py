@@ -59,4 +59,4 @@ class Piece(object):
 		super(self.__class__.__name__, self).__setattr__(name, value)
 
 		if name == 'player':
-			other_player = 1 if value == 2 else 2
+			self.other_player = 1 if value == 2 else 2
