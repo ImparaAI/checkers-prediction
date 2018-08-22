@@ -1,6 +1,6 @@
 from .board import Board
 
-class Game:
+class Game(object):
 
 	boards = []
 	move_limit = 500
