@@ -11,8 +11,11 @@ class Game(object):
 	def set_move_limit(self, move_limit):
 		self.move_limit = move_limit
 
-	def move(self, starting_position, ending_position):
-		pass
+	def move(self, move):
+		if move not in self.get_possible_moves():
+			raise ValueError('The provided move is not possible')
+
+		boards.append(self.boards[-1].create_new_board_from_move(move))
 
 	def move_limit_reached(self):
 		return len(self.boards) > self.move_limit
@@ -29,4 +32,7 @@ class Game(object):
 			return 0
 
 	def get_possible_moves(self):
-		pass
+		return self.boards[-1].get_possible_moves()
+
+	def whose_turn(self):
+		return self.boards[-1].player_turn
