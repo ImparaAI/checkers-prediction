@@ -2,10 +2,9 @@ from .board import Board
 
 class Game(object):
 
-	boards = []
-	move_limit = 500
-
 	def __init__(self):
+		self.boards = []
+		self.move_limit = 500
 		self.boards.append(Board())
 
 	def set_move_limit(self, move_limit):
@@ -15,7 +14,9 @@ class Game(object):
 		if move not in self.get_possible_moves():
 			raise ValueError('The provided move is not possible')
 
-		boards.append(self.boards[-1].create_new_board_from_move(move))
+		self.boards.append(self.boards[-1].create_new_board_from_move(move))
+
+		return self
 
 	def move_limit_reached(self):
 		return len(self.boards) > self.move_limit

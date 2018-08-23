@@ -1,12 +1,14 @@
 from math import ceil
 
 class Piece(object):
-	player = None
-	other_player = None
-	king = False
-	captured = False
-	position = None
-	board = None
+
+	def __init__(self):
+		self.player = None
+		self.other_player = None
+		self.king = False
+		self.captured = False
+		self.position = None
+		self.board = None
 
 	def counts_for(self, player_number):
 		return self.player == player_number and not self.captured

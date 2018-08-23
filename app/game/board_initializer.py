@@ -2,8 +2,6 @@ from .piece import Piece
 
 class BoardInitializer(object):
 
-	board = None
-
 	def __init__(self, board):
 		self.board = board
 

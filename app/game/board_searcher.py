@@ -2,15 +2,13 @@ from functools import reduce
 
 class BoardSearcher(object):
 
-	board = None
-	open_positions = []
-	filled_positions = []
-	player_positions = {}
-	player_pieces = {}
-	position_pieces = {}
-
 	def build(self, board):
 		self.board = board
+		self.open_positions = []
+		self.filled_positions = []
+		self.player_positions = {}
+		self.player_pieces = {}
+		self.position_pieces = {}
 
 		self.build_filled_positions()
 		self.build_open_positions()

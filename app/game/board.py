@@ -5,17 +5,15 @@ from .board_initializer import BoardInitializer
 
 class Board(object):
 
-	player_turn = 1
-	width = 4
-	height = 8
-	position_count = width * height
-	rows_per_user_with_pieces = 3
-	position_layout = {}
-	pieces = []
-	piece_requiring_further_capture_moves = None
-	searcher = BoardSearcher()
-
 	def __init__(self):
+		self.player_turn = 1
+		self.width = 4
+		self.height = 8
+		self.position_count = self.width * self.height
+		self.rows_per_user_with_pieces = 3
+		self.position_layout = {}
+		self.piece_requiring_further_capture_moves = None
+		self.searcher = BoardSearcher()
 		BoardInitializer(self).initialize()
 
 	def count_player_pieces(player_number = 1):
