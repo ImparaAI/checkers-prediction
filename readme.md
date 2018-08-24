@@ -8,11 +8,14 @@ This was built to work in conjunction with the [web app](https://github.com/Impa
 
 ## /train
 Method: `POST`
+
 Input: `episodes=int, time_limit_in_seconds=int`
 
 ## /predict
 Method: `GET`
+
 Input: `moves=[[int, int], [int, int], ...]`
+
 Output: `[int, int]`
 
 # Assumptions
