@@ -32,7 +32,7 @@ class Game(object):
 		elif not self.boards[-1].count_player_pieces(2):
 			return 1
 		else:
-			return 0
+			return None
 
 	def get_possible_moves(self):
 		return self.boards[-1].get_possible_moves()

@@ -17,7 +17,7 @@ class Board(object):
 		BoardInitializer(self).initialize()
 
 	def count_player_pieces(self, player_number = 1):
-		return reduce((lambda count, piece: count + (1 if piece.counts_for(player_number) else 0)), self.searcher.get_pieces_in_play())
+		return reduce((lambda count, piece: count + (1 if piece.counts_for(player_number) else 0)), self.searcher.uncaptured_pieces, 0)
 
 	def get_possible_moves(self):
 		capture_moves = self.get_possible_capture_moves()
