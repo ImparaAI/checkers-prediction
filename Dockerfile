@@ -14,9 +14,7 @@ COPY docker/start.sh /bin/original_start.sh
 
 RUN sed -i -e 's/\r$//' /root/.bashrc && \
     tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
-    chmod -R 700 /bin/start.sh && \
-    rm /usr/bin/python && \
-    ln -s /usr/bin/python3 /usr/bin/python
+    chmod -R 700 /bin/start.sh
 
 COPY . /var/app
 
