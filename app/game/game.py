@@ -27,9 +27,9 @@ class Game(object):
 		return self.move_limit_reached() or not self.get_possible_moves();
 
 	def get_winner(self):
-		if not self.boards[-1].count_player_pieces(1):
+		if not self.boards[-1].count_movable_player_pieces(1):
 			return 2
-		elif not self.boards[-1].count_player_pieces(2):
+		elif not self.boards[-1].count_movable_player_pieces(2):
 			return 1
 		else:
 			return None

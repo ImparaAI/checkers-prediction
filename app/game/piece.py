@@ -12,8 +12,8 @@ class Piece(object):
 		self.board = None
 		self.capture_move_enemies = {}
 
-	def counts_for(self, player_number):
-		return self.player == player_number and not self.captured
+	def is_movable(self):
+		return (self.get_possible_capture_moves() or self.get_possible_positional_moves()) and not self.captured
 
 	def capture(self):
 		self.captured = True
