@@ -1,4 +1,5 @@
 from math import ceil
+from functools import reduce
 
 class Piece(object):
 
@@ -9,26 +10,36 @@ class Piece(object):
 		self.captured = False
 		self.position = None
 		self.board = None
+		self.capture_move_enemies = {}
 
 	def counts_for(self, player_number):
 		return self.player == player_number and not self.captured
 
+	def capture(self):
+		self.captured = True
+		self.position = None
+
+	def move(self, new_position):
+		self.position = new_position
+		self.king = self.king or self.is_on_enemy_home_row()
+
 	def get_possible_capture_moves(self):
-		adjacent_enemy_positions = filter((lambda position: position in self.board.searcher.get_pieces_by_player(self.other_player)), self.get_adjacent_positions())
+		adjacent_enemy_positions = list(filter((lambda position: position in self.board.searcher.get_positions_by_player(self.other_player)), self.get_adjacent_positions()))
 		capture_move_positions = []
-		current_row = self.get_row()
-		current_column = self.get_column()
 
 		for enemy_position in adjacent_enemy_positions:
-			enemy_piece = self.board.get_piece_by_position(enemy_position)
+			enemy_piece = self.board.searcher.get_piece_by_position(enemy_position)
 			position_behind_enemy = self.get_position_behind_enemy(enemy_piece)
 
 			if (position_behind_enemy != None) and self.board.position_is_open(position_behind_enemy):
 				capture_move_positions.append(position_behind_enemy)
+				self.capture_move_enemies[position_behind_enemy] = enemy_piece
 
 		return self.create_moves_from_new_positions(capture_move_positions)
 
 	def get_position_behind_enemy(self, enemy_piece):
+		current_row = self.get_row()
+		current_column = self.get_column()
 		enemy_column = enemy_piece.get_column()
 		enemy_row = enemy_piece.get_row()
 		column_adjustment = -1 if current_row % 2 == 0 else 1
@@ -52,7 +63,13 @@ class Piece(object):
 		return (self.position - 1) % self.board.width
 
 	def get_row(self):
-		return ceil(self.position / self.board.width) - 1
+		return self.get_row_from_position(self.position)
+
+	def is_on_enemy_home_row(self):
+		return self.get_row() == self.get_row_from_position(1 if self.other_player == 1 else self.board.position_count)
+
+	def get_row_from_position(self, position):
+		return ceil(position / self.board.width) - 1
 
 	def get_directional_adjacent_positions(self, forward):
 		positions = []

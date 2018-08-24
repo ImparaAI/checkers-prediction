@@ -44,10 +44,14 @@ class Board(object):
 		return new_board
 
 	def perform_capture_move(self, move):
+		piece = self.searcher.get_piece_by_position(move[0])
+		originally_was_king = piece.king
+		enemy_piece = piece.capture_move_enemies[move[1]]
+		enemy_piece.capture()
 		self.move_piece(move)
 		further_capture_moves_for_piece = [capture_move for capture_move in self.get_possible_capture_moves() if move[1] == capture_move[0]]
 
-		if further_capture_moves_for_piece:
+		if further_capture_moves_for_piece and (originally_was_king == piece.king):
 			self.piece_requiring_further_capture_moves = self.searcher.get_piece_by_position(move[1])
 		else:
 			self.piece_requiring_further_capture_moves = None
@@ -61,8 +65,8 @@ class Board(object):
 		self.player_turn = 1 if self.player_turn == 2 else 2
 
 	def move_piece(self, move):
-		self.searcher.get_piece_by_position(move[0]).position = move[1]
-		self.searcher.build(self)
+		self.searcher.get_piece_by_position(move[0]).move(move[1])
+		self.pieces = sorted(self.pieces, key=lambda piece: piece.position if piece.position else 0)
 
 	def get_position_from_column_and_row(self, column, row):
 		return self.position_layout.get(row, {}).get(column, None)
