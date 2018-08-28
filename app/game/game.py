@@ -8,9 +8,6 @@ class Game(object):
 		self.move_limit = 500
 		self.boards.append(Board())
 
-	def set_move_limit(self, move_limit):
-		self.move_limit = move_limit
-
 	def move(self, move):
 		if move not in self.get_possible_moves():
 			raise ValueError('The provided move is not possible')
