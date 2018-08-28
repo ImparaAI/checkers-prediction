@@ -11,6 +11,7 @@ class Board(object):
 		self.height = 8
 		self.position_count = self.width * self.height
 		self.rows_per_user_with_pieces = 3
+		self.pieces = []
 		self.position_layout = {}
 		self.piece_requiring_further_capture_moves = None
 		self.searcher = BoardSearcher()
