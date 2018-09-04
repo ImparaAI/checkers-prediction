@@ -15,14 +15,20 @@ class Node:
 	def update_win_value(self, value):
 		self.win_value += value
 		self.visits += 1
-		self.parent.update_win_value(value)
+
+		if self.parent:
+			self.parent.update_win_value(value)
 
 	def update_policy_value(self, value):
 		self.policy_value = value
 
 	def add_child(self, child):
-		self.children.push(child)
+		self.children.append(child)
 		child.parent = self
+
+	def add_children(self, children):
+		for child in children:
+			self.add_child(child)
 
 	def get_preferred_child(self):
 		best_children = []
@@ -35,7 +41,7 @@ class Node:
 				best_score = score
 				best_children = [child]
 			elif score == best_score:
-				best_children.push(child)
+				best_children.append(child)
 
 		return choice(best_children)
 
@@ -45,6 +51,8 @@ class Node:
 		win_operand = self.win_value / (self.visits or 1)
 
 		self.score = win_operand + discovery_operand
+
+		return self.score
 
 	def is_scorable(self):
 		return self.visits or self.policy_value != None

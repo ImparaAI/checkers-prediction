@@ -12,7 +12,17 @@ class MonteCarlo:
 		#do some tree pruning
 
 	def make_choice(self):
+		best_children = []
+		most_visits = float('-inf')
 
+		for child in self.root_node.children:
+			if child.visits > most_visits:
+				most_visits = child.visits
+				best_children = [child]
+			elif child.visits == most_visits:
+				best_children.append(child)
+
+		return choice(best_children)
 
 	def simulate(self):
 		current_node = self.root_node
@@ -23,7 +33,7 @@ class MonteCarlo:
 		self.expand(current_node)
 
 	def expand(self, node):
-		node.children = self.child_finder(node)
+		self.child_finder(node)
 
 		for child in node.children:
 			child_win_value = self.node_evaluator(child)
@@ -35,10 +45,13 @@ class MonteCarlo:
 				self.random_rollout(child)
 				child.children = []
 
+		node.expanded = True
+
 	def random_rollout(self, node):
 		self.child_finder(node)
 		child = choice(node.children)
-		node.children = [child]
+		node.children = []
+		node.add_child(child)
 		child_win_value = self.node_evaluator(child)
 
 		if child_win_value != None:
