@@ -1,12 +1,18 @@
+from random import choice
+
 class MonteCarlo:
 
 	def __init__(self, root_node):
 		self.root_node = root_node
 		self.child_finder = None
+		self.node_evaluator = lambda child: None
 
 	def change_root_node(self, root_node):
 		self.root_node = root_node
 		#do some tree pruning
+
+	def make_choice(self):
+
 
 	def simulate(self):
 		current_node = self.root_node
@@ -17,16 +23,25 @@ class MonteCarlo:
 		self.expand(current_node)
 
 	def expand(self, node):
-		for child_node in self.child_finder(node):
-			node.children.push(child_node)
+		node.children = self.child_finder(node)
 
-			if not child_node.visits
+		for child in node.children:
+			child_win_value = self.node_evaluator(child)
 
-	def roll_out(self, node):
+			if child_win_value != None:
+				child.update_win_value(child_win_value)
 
-		unvisited_node =
-		if not node.children:
-			node.children = self.child_finder(node)
+			if not child.is_scorable():
+				self.random_rollout(child)
+				child.children = []
 
-			for child_node in node.children:
-				child_node
+	def random_rollout(self, node):
+		self.child_finder(node)
+		child = choice(node.children)
+		node.children = [child]
+		child_win_value = self.node_evaluator(child)
+
+		if child_win_value != None:
+			node.update_win_value(child_win_value)
+		else:
+			self.random_rollout(child)
