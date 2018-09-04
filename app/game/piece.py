@@ -1,5 +1,4 @@
 from math import ceil
-from functools import reduce
 
 class Piece(object):
 
