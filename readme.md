@@ -45,3 +45,7 @@ something about whose turn it is
 # Why checkers?
 
 Since checkers is a much simpler game than go or chess, the solution space is drastically reduced, while not being so trivial that it can be easily brute-forced on a regular computer in a short amount of time (like tic-tac-toe). This app's training can be run on a relatively cheap machine and doesn't really require a GPU or TPU.
+
+# Testing
+
+Go to the app directory and run `python3 -m unittest discover`
