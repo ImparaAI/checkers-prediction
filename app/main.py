@@ -1,6 +1,6 @@
+from prediction import predictor
 from flask import Flask, request, jsonify
 from training.session import restarter as training_session_restarter
-from prediction import predictor
 
 app = Flask(__name__)
 

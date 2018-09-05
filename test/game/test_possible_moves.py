@@ -46,5 +46,5 @@ class TestPossibleMoves(unittest.TestCase):
 		self.game.move(move)
 
 	def expect(self, expected_possible_moves):
-		self.assertEqual(self.game.get_possible_moves(), expected_possible_moves);
+		self.assertEqual(self.game.get_possible_moves(), expected_possible_moves)
 		return self

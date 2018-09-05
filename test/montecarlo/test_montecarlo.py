@@ -15,7 +15,7 @@ class test_montecarlo(unittest.TestCase):
 			montecarlo.simulate()
 
 		chosen_node = montecarlo.make_choice()
-		self.assertIs(chosen_node.state, 1);
+		self.assertIs(chosen_node.state, 1)
 
 	def child_finder(self, node):
 		if node.state == 0:
