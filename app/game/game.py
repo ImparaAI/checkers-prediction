@@ -4,7 +4,7 @@ class Game(object):
 
 	def __init__(self):
 		self.board = Board()
-		self.boards = [];
+		self.boards = [self.board];
 		self.moves = []
 		self.move_limit = 500
 
