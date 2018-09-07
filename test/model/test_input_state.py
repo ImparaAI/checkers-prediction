@@ -30,7 +30,7 @@ class test_input_state(unittest.TestCase):
 		input_state[32] = np.ones((8, 4), dtype=np.int)
 
 		#move count
-		input_state[33][0][0] = 1
+		input_state[33][7][3] = 1
 
 		np.testing.assert_array_equal(build_input_state(game), input_state)
 
@@ -56,8 +56,8 @@ class test_input_state(unittest.TestCase):
 		input_state[16][3][0] = 1
 
 		#two move count
-		input_state[33][0][0] = 1
-		input_state[33][0][1] = 1
+		input_state[33][7][2] = 1
+		input_state[33][7][3] = 0
 
 		np.testing.assert_array_equal(build_input_state(game), input_state)
 
@@ -394,12 +394,12 @@ class test_input_state(unittest.TestCase):
 			 [1, 1, 1, 1],
 			 [1, 1, 1, 1]],
 			#move count
-			[[1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 1],
-			 [1, 1, 1, 0]],
+			[[0, 0, 0, 0],
+			 [0, 0, 0, 0],
+			 [0, 0, 0, 0],
+			 [0, 0, 0, 0],
+			 [0, 0, 0, 0],
+			 [0, 0, 0, 0],
+			 [0, 0, 0, 1],
+			 [1, 1, 1, 1]],
 		]
