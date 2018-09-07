@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from app.game.game import Game
-from app.model.input_state import InputState
+from app.model.input_state import build_input_state
 
 class test_input_state(unittest.TestCase):
 
@@ -10,7 +10,7 @@ class test_input_state(unittest.TestCase):
 
 		input_state = self.build_inital_state()
 
-		np.testing.assert_array_equal(InputState().build_from(game), input_state)
+		np.testing.assert_array_equal(build_input_state(game), input_state)
 
 	def test_one_move(self):
 		game = Game()
@@ -32,7 +32,7 @@ class test_input_state(unittest.TestCase):
 		#move count
 		input_state[33][0][0] = 1
 
-		np.testing.assert_array_equal(InputState().build_from(game), input_state)
+		np.testing.assert_array_equal(build_input_state(game), input_state)
 
 	def test_two_moves(self):
 		game = Game()
@@ -59,7 +59,7 @@ class test_input_state(unittest.TestCase):
 		input_state[33][0][0] = 1
 		input_state[33][0][1] = 1
 
-		np.testing.assert_array_equal(InputState().build_from(game), input_state)
+		np.testing.assert_array_equal(build_input_state(game), input_state)
 
 	def test_kings(self):
 		game = Game()
@@ -68,7 +68,7 @@ class test_input_state(unittest.TestCase):
 		for move in moves:
 			game.move(move)
 
-		np.testing.assert_array_equal(InputState().build_from(game), self.build_king_state())
+		np.testing.assert_array_equal(build_input_state(game), self.build_king_state())
 
 	def build_inital_state(self):
 		input_state = np.zeros((34, 8, 4), dtype=np.int)
