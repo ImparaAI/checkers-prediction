@@ -28,7 +28,7 @@ def build_board_state(board, player_turn):
 		translated_row = translate_row(row, board.height, player_turn);
 
 		for column in range(board.width):
-			translated_column = translate_column(column, board.width, player_turn);
+			translated_column = translate_column(column, board.width, player_turn)
 			position = board.position_layout[row][column]
 			piece = board.searcher.get_piece_by_position(position)
 
