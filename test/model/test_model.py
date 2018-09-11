@@ -12,18 +12,10 @@ class test_model(unittest.TestCase):
 
 		reg_const = 0.0001
 		learning_rate = 0.1
-		input_dim = (34, 8, 4) #(2, 6, 7)
-		output_dim = 8 * 8 * 4 #42
-		hidden_layers = [
-			{'filters':75, 'kernel_size': (4,4)},
-			{'filters':75, 'kernel_size': (4,4)},
-			{'filters':75, 'kernel_size': (4,4)},
-			{'filters':75, 'kernel_size': (4,4)},
-			{'filters':75, 'kernel_size': (4,4)},
-			{'filters':75, 'kernel_size': (4,4)}
-		]
+		input_dimensions = (34, 8, 4) #(2, 6, 7)
+		output_dimensions = 8 * 8 * 4 #42
 
-		nn = Model(reg_const, learning_rate, input_dim, output_dim, hidden_layers)
+		nn = Model(reg_const, learning_rate, input_dimensions, output_dimensions)
 
 
 		nn.model.set_weights(nn.model.get_weights())
