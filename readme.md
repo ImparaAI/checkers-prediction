@@ -48,4 +48,4 @@ Since checkers is a much simpler game than go or chess, the solution space is dr
 
 # Testing
 
-Go to the app directory and run `python3 -m unittest discover`
+Go to the app directory and run `python3 -m unittest discover` or just `test` if you're in the Docker container.
