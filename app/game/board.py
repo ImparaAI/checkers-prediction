@@ -68,8 +68,14 @@ class Board(object):
 		self.searcher.get_piece_by_position(move[0]).move(move[1])
 		self.pieces = sorted(self.pieces, key=lambda piece: piece.position if piece.position else 0)
 
-	def get_position_from_column_and_row(self, column, row):
-		return self.position_layout.get(row, {}).get(column, None)
+	def is_valid_row_and_column(self, row, column):
+		if row < 0 or row >= self.height:
+			return False
+
+		if column < 0 or column >= self.width:
+			return False
+
+		return True
 
 	def __setattr__(self, name, value):
 		super(Board, self).__setattr__(name, value)
