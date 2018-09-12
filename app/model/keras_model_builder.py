@@ -1,8 +1,12 @@
+import sys, os
 import tensorflow as tf
+stderr = sys.stderr
+sys.stderr = open(os.devnull, 'w')
 from keras import regularizers
 from keras.optimizers import SGD
 from keras.models import Model as KerasModel
 from keras.layers import add, BatchNormalization, Conv2D, Dense, Flatten, Input, LeakyReLU
+sys.stderr = stderr
 
 class KerasModelBuilder(object):
 
