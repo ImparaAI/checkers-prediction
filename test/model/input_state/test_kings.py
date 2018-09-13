@@ -1,10 +1,9 @@
-import unittest
 import numpy as np
+from . import BaseTest
 from app.game.game import Game
-from .initial_state import build_initial_state
 from app.model.input_state import build_input_state
 
-class test_kings(unittest.TestCase):
+class test_kings(BaseTest):
 
 	def test_kings(self):
 		game = Game()

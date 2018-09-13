@@ -1,10 +1,9 @@
-import unittest
 import numpy as np
+from . import BaseTest
 from app.game.game import Game
-from .initial_state import build_initial_state
 from app.model.input_state import build_input_state
 
-class test_player_moves(unittest.TestCase):
+class test_player_moves(BaseTest):
 
 	def test_one_move(self):
 		game = Game()
@@ -20,7 +19,7 @@ class test_player_moves(unittest.TestCase):
 		np.testing.assert_array_equal(build_input_state(game), self.get_second_move_state())
 
 	def get_first_move_state(self):
-		input_state = build_initial_state()
+		input_state = self.build_initial_state()
 
 		#set player 1 history  and new position
 		input_state[17] = input_state[16]
@@ -47,7 +46,7 @@ class test_player_moves(unittest.TestCase):
 		return input_state
 
 	def get_second_move_state(self):
-		input_state = build_initial_state()
+		input_state = self.build_initial_state()
 
 		#set new player 1 history
 		input_state[2] = input_state[0]
