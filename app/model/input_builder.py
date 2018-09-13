@@ -12,20 +12,20 @@ class InputBuilder(object):
 
 	def build(self):
 		for board_index, board in enumerate(reversed(self.game.boards[-8:])):
-			board_state = self.build_board(board)
+			board_planes = self.build_board_planes(board)
 
-			self.input[board_index] = board_state[0]
-			self.input[board_index + 8] = board_state[1]
-			self.input[board_index + 16] = board_state[2]
-			self.input[board_index + 24] = board_state[3]
+			self.input[board_index] = board_planes[0]
+			self.input[board_index + 8] = board_planes[1]
+			self.input[board_index + 16] = board_planes[2]
+			self.input[board_index + 24] = board_planes[3]
 
 		self.input[32] = self.build_player_turn(self.game.board)
 		self.input[33] = self.build_move_count(self.game.board, len(self.game.moves))
 
 		return self.input
 
-	def build_board(self, board):
-		board_state = np.zeros((4, board.height, board.width), dtype = np.int)
+	def build_board_planes(self, board):
+		board_planes = np.zeros((4, board.height, board.width), dtype = np.int)
 
 		for row in range(board.height):
 			translated_row = self.translate_row(row, board.height);
@@ -38,9 +38,9 @@ class InputBuilder(object):
 				if piece:
 					plane = 0 if self.player_turn == piece.player else 2
 					plane += 1 if piece.king else 0;
-					board_state[plane][translated_row][translated_column] = 1
+					board_planes[plane][translated_row][translated_column] = 1
 
-		return board_state
+		return board_planes
 
 	def build_player_turn(self, board):
 		if self.player_turn == 1:
