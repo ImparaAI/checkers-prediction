@@ -1,7 +1,7 @@
 import numpy as np
 from . import BaseTest
 from app.game.game import Game
-from app.model.input_state import build_input_state
+from app.model.input_builder import build as build_input_state
 
 class test_player_moves(BaseTest):
 

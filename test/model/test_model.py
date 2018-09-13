@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from app.game.game import Game
 from app.model.model import Model
-from app.model.input_state import build_input_state
+from app.model.input_builder import build as build_input_state
 
 class test_model(unittest.TestCase):
 
@@ -18,4 +18,4 @@ class test_model(unittest.TestCase):
 
 		prediction = model.predict(np.array([build_input_state(game)]))
 
-		print(prediction)
+		#print(prediction)
