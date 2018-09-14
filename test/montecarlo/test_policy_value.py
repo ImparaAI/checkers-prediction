@@ -2,14 +2,13 @@ import unittest
 from app.montecarlo.node import Node
 from app.montecarlo.montecarlo import MonteCarlo
 
-class test_policy_value(unittest.TestCase):
+class TestPolicyValue(unittest.TestCase):
 
 	def test_choice_is_correct(self):
 		montecarlo = MonteCarlo(Node(0))
 		montecarlo.child_finder = self.child_finder
 
-		for i in range(50):
-			montecarlo.simulate()
+		montecarlo.simulate(50)
 
 		chosen_node = montecarlo.make_choice()
 		self.assertIs(chosen_node.state, 1)

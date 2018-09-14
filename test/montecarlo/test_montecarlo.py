@@ -1,18 +1,15 @@
 import unittest
-from random import randint
-from functools import reduce
 from app.montecarlo.node import Node
 from app.montecarlo.montecarlo import MonteCarlo
 
-class test_montecarlo(unittest.TestCase):
+class TestMonteCarlo(unittest.TestCase):
 
 	def test_choice_is_correct(self):
 		montecarlo = MonteCarlo(Node(0))
 		montecarlo.child_finder = self.child_finder
 		montecarlo.node_evaluator = self.node_evaluator
 
-		for i in range(50):
-			montecarlo.simulate()
+		montecarlo.simulate(50)
 
 		chosen_node = montecarlo.make_choice()
 		self.assertIs(chosen_node.state, 1)

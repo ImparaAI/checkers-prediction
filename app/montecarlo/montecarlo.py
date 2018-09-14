@@ -7,10 +7,6 @@ class MonteCarlo:
 		self.child_finder = None
 		self.node_evaluator = lambda child: None
 
-	def change_root_node(self, root_node):
-		self.root_node = root_node
-		#do some tree pruning
-
 	def make_choice(self):
 		best_children = []
 		most_visits = float('-inf')
@@ -24,13 +20,14 @@ class MonteCarlo:
 
 		return choice(best_children)
 
-	def simulate(self):
-		current_node = self.root_node
+	def simulate(self, expansion_count = 1):
+		for i in range(expansion_count):
+			current_node = self.root_node
 
-		while current_node.expanded:
-			current_node = current_node.get_preferred_child()
+			while current_node.expanded:
+				current_node = current_node.get_preferred_child()
 
-		self.expand(current_node)
+			self.expand(current_node)
 
 	def expand(self, node):
 		self.child_finder(node)
