@@ -1,6 +1,6 @@
 import numpy as np
 from copy import deepcopy
-from app.game.game import Game
+from checkers.game import Game
 from app.model.model import Model
 from app.model import action_space
 from app.model import input_builder

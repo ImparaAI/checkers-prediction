@@ -1,6 +1,6 @@
 from copy import deepcopy
 from app.model import builder
-from app.game.game import Game
+from checkers.game import Game
 from app.montecarlo.node import Node
 from app.montecarlo.montecarlo import MonteCarlo
 
