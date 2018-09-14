@@ -4,16 +4,34 @@ from model import input_builder
 
 def predict(moves):
 	game = build_game(moves)
-	input_state = input_builder.build(game).input
+	montecarlo = MonteCarlo(Node(game))
+	montecarlo.child_finder = child_finder
 
-	model = Model(input_state.shape(), 8 * game.board.height * game.board.width)
-	model.predict(input_state);
+	montecarlo.simulate(50)
 
+	chosen_node = montecarlo.make_choice()
 
 	#montecarlo go and do you shit with these params
 
 
 	return builder.build().predict(request)
+
+def child_finder(node):
+	prediction = self.model.predict(self.build_input(node.state))
+	node.update_win_value(prediction.win_value)
+
+	prediction.action_probabilities = [.91, .02, .00003, ...]
+
+	for move in node.state.get_possible_moves():
+
+		prediction.action_probabilities
+
+
+		child = Node(deepcopy(node.state))
+		child.state.move(move)
+		child.policy_value = self.get_policy_value(move, node.state.whose_turn())
+		node.add_child(child)
+
 
 def build_game(moves):
 	game = Game()
