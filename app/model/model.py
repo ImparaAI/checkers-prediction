@@ -1,7 +1,7 @@
 from .hyperparameters import HyperParameters
 from .keras_model_builder import KerasModelBuilder
 
-class Model(object):
+class Model:
 
 	def __init__(self, input_dimensions, output_dimensions, hyperparameters = None):
 		self.input_dimensions = input_dimensions

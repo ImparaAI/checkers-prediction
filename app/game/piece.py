@@ -1,6 +1,6 @@
 from math import ceil
 
-class Piece(object):
+class Piece:
 
 	def __init__(self):
 		self.player = None

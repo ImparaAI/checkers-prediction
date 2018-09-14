@@ -3,7 +3,7 @@ import numpy as np
 def build(game):
 	return InputBuilder(game).build()
 
-class InputBuilder(object):
+class InputBuilder:
 
 	def __init__(self, game):
 		self.game = game

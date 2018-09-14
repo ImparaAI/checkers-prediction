@@ -1,6 +1,6 @@
 from functools import reduce
 
-class BoardSearcher(object):
+class BoardSearcher:
 
 	def build(self, board):
 		self.board = board

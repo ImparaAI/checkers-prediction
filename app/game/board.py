@@ -3,7 +3,7 @@ from functools import reduce
 from .board_searcher import BoardSearcher
 from .board_initializer import BoardInitializer
 
-class Board(object):
+class Board:
 
 	def __init__(self):
 		self.player_turn = 1

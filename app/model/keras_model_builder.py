@@ -4,7 +4,7 @@ from keras.optimizers import SGD
 from keras.models import Model as KerasModel
 from keras.layers import add, BatchNormalization, Conv2D, Dense, Flatten, Input, LeakyReLU
 
-class KerasModelBuilder(object):
+class KerasModelBuilder:
 
 	def __init__(self, input_dimensions, output_dimensions, hyperparameters):
 		self.input_dimensions = input_dimensions

@@ -1,6 +1,6 @@
 from .board import Board
 
-class Game(object):
+class Game:
 
 	def __init__(self):
 		self.board = Board()

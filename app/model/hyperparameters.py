@@ -1,4 +1,4 @@
-class HyperParameters(object):
+class HyperParameters:
 
 	def __init__(self):
 		self.momentum = 0.9
