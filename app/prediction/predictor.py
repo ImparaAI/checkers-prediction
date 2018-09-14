@@ -1,5 +1,5 @@
-from game.game import Game
 from model.model import Model
+from checkers.game import Game
 from model import input_builder
 
 def predict(moves):

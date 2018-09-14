@@ -11,7 +11,8 @@ RUN pip3 install -U \
 	numpy \
 	tensorflow \
 	keras \
-	flask
+	flask \
+	imparaai-checkers
 
 COPY docker/conf/supervisord.conf /etc/supervisor.d/supervisord.ini
 COPY docker/conf/.bashrc /root/.bashrc

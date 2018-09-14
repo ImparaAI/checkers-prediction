@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from app.game.game import Game
+from checkers.game import Game
 from app.model.model import Model
 from app.model.input_builder import build as build_input_state
 

@@ -1,6 +1,6 @@
 import numpy as np
 from . import BaseTest
-from app.game.game import Game
+from checkers.game import Game
 from app.model.input_builder import build as build_input_state
 
 class test_kings(BaseTest):

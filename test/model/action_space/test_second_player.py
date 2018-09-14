@@ -1,5 +1,5 @@
 import unittest
-from app.game.game import Game
+from checkers.game import Game
 from app.model.action_space import get_action
 
 class test_second_player(unittest.TestCase):
