@@ -71,15 +71,7 @@ By default, this app uses 75 convolution kernels (i.e. "neurons") per convolutio
 - Checkers is inherently simpler than Chess or Go
 - We expect training to work decently on a moderately powerful CPU, rather than necessarily on a GPU or TPU
 
-It's worth keeping in mind that in neural nets finding the right number of "neurons" and residual layers is a bit of an art. There may indeed be a way of precisely quantifying the correlation between training accuracy and these hyperparameters for specific problems, but when this app was made it was not immediately obvious to us how to do it. In the end these numbers were chosen with an eye toward minimizing them while subjectively keeping a high enough prediction accuracy.
-
-Both neural nets (`policy` and `value`) have identical inputs:
-
-```
-the current board state as two arrays of 32 spots (one for each player) where a 1 is a regular piece and a 2 is a king
-the board state for the previous 8 moves
-something about whose turn it is
-```
+It's worth keeping in mind that in neural nets finding the right number of "neurons" and residual layers is a bit of an art. There may indeed be a way of precisely quantifying the correlation between prediction accuracy and these hyperparameters for specific problems, but when this app was made it was not immediately obvious to us how to do it. Our method for choosing these numbers was a process of trial and error with a goal of minimizing them (for performance) while subjectively keeping a high enough prediction accuracy.
 
 # Why checkers?
 
