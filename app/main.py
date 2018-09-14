@@ -1,3 +1,4 @@
+import json
 from prediction import predictor
 from flask import Flask, request, jsonify
 from training.session import restarter as training_session_restarter
@@ -10,7 +11,9 @@ def train():
 
 @app.route("/predict", methods=['GET'])
 def predict():
-	return jsonify({'prediction': [23, 18]})
+	moves = json.loads(request.args.get('moves'))
+
+	return jsonify({'prediction': predictor.predict(moves)})
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=80, debug=True)
