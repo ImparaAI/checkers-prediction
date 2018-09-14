@@ -6,27 +6,27 @@ def get_action(index, game):
 
 	actions = np.reshape(actions, (8, game.board.height, game.board.width))
 
-	for plane, rows in enumerate(actions):
+	for direction, rows in enumerate(actions):
 		for row, columns in enumerate(rows):
 			for column, value in enumerate(columns):
 				if value:
-					return translate_action(game, plane, row, column)
+					return translate_action(game, direction, row, column)
 
-def translate_action(game, plane, row, column):
+def translate_action(game, direction, row, column):
 	player_turn = game.whose_turn()
 	translated_row = translate_row(row, game.board.height, player_turn)
 	translated_column = translate_column(column, game.board.width, player_turn)
 
 	from_position = game.board.position_layout[translated_row][translated_column]
-	to_position = get_to_position(game, plane, translated_row, translated_column, player_turn)
+	to_position = get_to_position(game, direction, translated_row, translated_column, player_turn)
 
 	return [from_position, to_position]
 
-def get_to_position(game, plane, from_row, from_column, player_turn):
+def get_to_position(game, direction, from_row, from_column, player_turn):
 	to_row_column = get_player_one_positions(from_row, from_column) if player_turn == 1 else get_player_two_positions(from_row, from_column)
 
-	to_row = to_row_column[plane][0]
-	to_column = to_row_column[plane][1]
+	to_row = to_row_column[direction][0]
+	to_column = to_row_column[direction][1]
 
 	if (game.board.is_valid_row_and_column(to_row, to_column)):
 		return game.board.position_layout[to_row][to_column]

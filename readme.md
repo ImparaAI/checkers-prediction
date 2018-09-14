@@ -62,7 +62,9 @@ The neural net has two outputs:
 - **6**: move 2 spots to the northeast
 - **7**: move 2 spots to the northwest
 
-This is repeated for all 32 positions on the board, for a total of 256 elements. During training, the output values are simply `0`s and `1`s, but predictions provide a probability of success between `0` and `1`. When the Monte Carlo tree search is making decisions about which moves to populate as child nodes, it iterates over all possible moves and finds the probability values (`p`) for them from this output, which eliminates the need to drill down further for that child node as you might do in a non-NN MCTS algorithm.
+This is repeated for all 32 positions on the board, for a total of 256 elements.
+
+During training, the output values are `0` for all impossible moves and a value between `0` and `1` for all possible moves. The value is determined by the number of visits in the Monte Carlo tree search simulation relative to the other possible moves. When the Monte Carlo tree search is making decisions about which moves to populate as child nodes, it iterates over all possible moves and finds the probability values (`p`) for them from this output, which eliminates the need to drill down further for that child node as you might do in a non-NN MCTS algorithm.
 
 ### Differences with AlphaZero
 
