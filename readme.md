@@ -34,6 +34,45 @@ Each training run starts the neural net over from scratch. By default, a trainin
 
 ## Neural network architecture
 
+The neural net's job is to reduce the amount of digging for the Monte Carlo tree search algorithm. The network itself is structurally identical to the AlphaZero network with the exception of the inputs, the predicted outputs, and certain small details in the convolutional layers
+
+### Input
+
+The input to the neural net is a multidimensional numpy array that is `34 x 8 x 4` (depth x height x width), or `34` layers of `8 x 4` 2d arrays. The `8 x 4` is determined by the shape of the board. Ignoring the white spaces, each checkers board has 8 vertical spots and 4 horizontal spots. The `34` is made up like this:
+
+- Layers **1-32** hold the state of the board's pieces for the last 8 moves. So layers **1-4** hold the board state for the most recent move, layers **5-8** hold the board state for the second most recent move, etc. Within a single move's board state, the first layer describes the position of the current player's non-king pieces, the second layer is for the current opponent's non-king pieces, the third is the current player's king pieces, and the fourth is the current opponent's king pieces. The distinction between the current player and the opponent is important as the neural net only ever makes predictions from the perspective of the current player.
+- Layer **33** has all 0s if it's player 1's turn and all 1s if it's player 2's turn.
+- Layer **34** has a binary representation of the current move count. If it's move 29, that would be represented as `11101` in binary. That is then converted into a numpy `8 x 4` array that looks like `[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1], [1, 1, 0, 1]]`.
+
+The end result is that every value in this multidimensional input is either a `1` or a `0` and it fully represents everything about the current state of the board and the 7 previous moves.
+
+### Outputs
+
+The neural net has two outputs:
+
+- A float that represents the expected win value for the current player given the current board state. In the Monte Carlo tree search algorithm this is the `W` value for the node being evaluated.
+- A flat list 256 elements long, each of which hold a float value between `0` and `1` representing a success probability for choosing that move. Each spot on the board gets 8 potential move positions representing the direction and the distance of the move. So positions `0-7` in this array are reserved for spot 1's potential moves:
+
+- **0**: move 1 spot to the southeast
+- **1**: move 1 spot to the southwest
+- **2**: move 1 spot to the northeast
+- **3**: move 1 spot to the northwest
+- **4**: move 2 spots to the southeast
+- **5**: move 2 spots to the southwest
+- **6**: move 2 spots to the northeast
+- **7**: move 2 spots to the northwest
+
+This is repeated for all 32 positions on the board, for a total of 256 elements. During training, the output values are simply `0`s and `1`s, but predictions provide a probability of success between `0` and `1`. When the Monte Carlo tree search is making decisions about which moves to populate as child nodes, it iterates over all possible moves and finds the probability values (`p`) for them from this output, which eliminates the need to drill down further for that child node as you might do in a non-NN MCTS algorithm.
+
+### Differences with AlphaZero
+
+By default, this app uses 75 convolution kernels (i.e. "neurons") per convolutional layer whereas AlphaZero uses 256. AlphaZero also uses 40 residual layers where this app uses 6. The reasons for this are:
+
+- Checkers is inherently simpler than Chess or Go
+- We expect training to work decently on a moderately powerful CPU, rather than necessarily on a GPU or TPU
+
+It's worth keeping in mind that in neural nets finding the right number of "neurons" and residual layers is a bit of an art. There may indeed be a way of precisely quantifying the correlation between training accuracy and these hyperparameters for specific problems, but when this app was made it was not immediately obvious to us how to do it. In the end these numbers were chosen with an eye toward minimizing them while subjectively keeping a high enough prediction accuracy.
+
 Both neural nets (`policy` and `value`) have identical inputs:
 
 ```
