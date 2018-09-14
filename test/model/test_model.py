@@ -9,13 +9,9 @@ class test_model(unittest.TestCase):
 	def test_model(self):
 		game = Game()
 
-		input_dimensions = (34, 8, 4) #(2, 6, 7)
-		output_dimensions = 8 * 8 * 4 #42
+		input_dimensions = (34, 8, 4)
+		output_dimensions = 8 * 8 * 4
 
 		model = Model(input_dimensions, output_dimensions)
 
-		model.keras_model.set_weights(model.keras_model.get_weights())
-
 		prediction = model.predict(np.array([build_input_state(game)]))
-
-		#print(prediction)

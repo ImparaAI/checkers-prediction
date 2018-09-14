@@ -10,7 +10,12 @@ class Model:
 		self.keras_model =  KerasModelBuilder(input_dimensions, output_dimensions, self.hyperparameters).build()
 
 	def predict(self, prediction_input):
-		return self.keras_model.predict(prediction_input)
+		output = self.keras_model.predict(prediction_input)
+
+		return {
+			'win_value': output[0][0][0],
+			'action_probabilities': output[1].tolist()[0]
+		}
 
 	def train(self, inputs):
 		return 'training is happening'
