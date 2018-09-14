@@ -16,3 +16,5 @@ class test_model(unittest.TestCase):
 		model = Model(input_dimensions, output_dimensions)
 
 		prediction = model.predict(np.array([build_input_state(game)]))
+
+		print(predict([]))
