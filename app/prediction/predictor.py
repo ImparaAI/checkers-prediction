@@ -1,11 +1,11 @@
 import numpy as np
 from copy import deepcopy
 from checkers.game import Game
+from montecarlo.node import Node
 from app.model.model import Model
 from app.model import action_space
 from app.model import input_builder
-from app.montecarlo.node import Node
-from app.montecarlo.montecarlo import MonteCarlo
+from montecarlo.montecarlo import MonteCarlo
 
 def predict(moves):
 	game = build_game(moves)

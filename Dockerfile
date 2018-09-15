@@ -7,12 +7,14 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
 	supervisor
 
 RUN pip3 install -U \
+	setuptools \
 	h5py \
 	numpy \
 	tensorflow \
 	keras \
 	flask \
-	imparaai-checkers
+	imparaai-checkers \
+	imparaai-montecarlo
 
 COPY docker/conf/supervisord.conf /etc/supervisor.d/supervisord.ini
 COPY docker/conf/.bashrc /root/.bashrc

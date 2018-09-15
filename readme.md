@@ -20,15 +20,11 @@ Output: `[int, int]`
 
 # Assumptions
 
-The rules used are for competitive American checkers or English draughts. This means an 8x8 board with force captures and regular kings.
-
-Each position on the board is numbered 1 to 32. Each move is represented as an array with two values: starting position and ending position. So if you're starting a new game, one of the available moves is `[9, 13]` for player 1. If there's a capture move, the ending position is the position the capturing piece will land on (i.e. two rows from its original row), which might look like `[13, 22]`.
-
-Each piece movement is completely distinct, even if the move is part of a multiple capture series. In [Portable Draughts Notation](https://en.wikipedia.org/wiki/Portable_Draughts_Notation) mutli-capture series are usually represented by a `5-32` (for a particularly long series of jumps), but in certain situations there could be multiple pathways to achieve that final position. This app requires an explicit spelling out of each distinct move in the multi-capture series. The app will understand when it's still a player's turn because it's mid-multi-capture.
+The rules used are those defined by [our checkers library](https://github.com/ImparaAI/checkers). Importantly, each piece movement is completely distinct, with chained captures taking place over multiple turns where the player turn stays the same.
 
 # Training strategy
 
-This app uses a Monte Carlo tree search that roughly follows the methods used by [AlphaGo Zero](https://www.nature.com/articles/nature24270.epdf?author_access_token=VJXbVjaSHxFoctQQ4p2k4tRgN0jAjWel9jnR3ZoTv0PVW4gB86EEpGqTRDtpIz-2rmo8-KG06gqVobU5NSCFeHILHcVFUeMsbvwS-lxjqQGg98faovwjxeTUgZAUMnRQ). In short, every time it's the AI's turn to move, it uses one neural net to reduce the number of moves it should consider and another to evaluate the expected value of any particular move as we traverse the tree of possible moves in future rounds. In Google's terminology these are called the "policy network" and the "value network" respectively.
+This app uses a [Monte Carlo tree search library](https://github.com/ImparaAI/monte-carlo-tree-search) that roughly follows the methods used by [AlphaGo Zero](https://www.nature.com/articles/nature24270.epdf?author_access_token=VJXbVjaSHxFoctQQ4p2k4tRgN0jAjWel9jnR3ZoTv0PVW4gB86EEpGqTRDtpIz-2rmo8-KG06gqVobU5NSCFeHILHcVFUeMsbvwS-lxjqQGg98faovwjxeTUgZAUMnRQ). In short, every time it's the AI's turn to move, it uses one neural net to reduce the number of moves it should consider and another to evaluate the expected value of any particular move as we traverse the tree of possible moves in future rounds. In Google's terminology these are called the "policy network" and the "value network" respectively.
 
 Each training run starts the neural net over from scratch. By default, a training run lasts for 1000 games, but it's also possible to restrict this on time and number of games depending on the limitations of your machine.
 
