@@ -13,7 +13,6 @@ def train():
 def predict():
 	moves = json.loads(request.args.get('moves'))
 
-
 	return jsonify({'prediction': predictor.predict(moves)})
 
 if __name__ == '__main__':
