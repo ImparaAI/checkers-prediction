@@ -20,7 +20,7 @@ def predict(moves):
 
 def child_finder(node):
 	model = Model((34, 8, 4), 8 * 8 * 4)
-	prediction = model.predict( np.array([input_builder.build(node.state)]))
+	prediction = model.predict(np.array([input_builder.build(node.state)]))
 	node.update_win_value(prediction['win_value'])
 
 	for move in node.state.get_possible_moves():

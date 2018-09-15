@@ -18,7 +18,6 @@ def position_to_column(position, game):
 	return translate_column(column, game.board.width, game.whose_turn())
 
 def get_direction(from_row, from_column, to_row, to_column, player_turn):
-
 	row_direction = to_row - from_row
 	column_direction = to_column - from_column
 
