@@ -1,19 +1,11 @@
 import unittest
 from checkers.game import Game
-from app.model.action_space import get_action, get_action_index
+from app.model.action_space import get_action_index
 
 class test_first_player(unittest.TestCase):
 
 	def setUp(self):
 		self.game = Game()
-
-	def test_get_action(self):
-		for direction, rows in enumerate(self.get_action_space()):
-			for row, columns in enumerate(rows):
-				for column, move in enumerate(columns):
-					if move is not None:
-						index = self.convert_to_index(direction, row, column)
-						self.assertEqual(get_action(index, self.game), move)
 
 	def test_action_index(self):
 		for direction, rows in enumerate(self.get_action_space()):
