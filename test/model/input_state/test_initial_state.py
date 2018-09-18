@@ -1,7 +1,7 @@
 import numpy as np
 from . import BaseTest
 from checkers.game import Game
-from app.model.input_builder import build as build_input_state
+from app.model.checkers.input_builder import build as build_input_state
 
 class test_initial_state(BaseTest):
 

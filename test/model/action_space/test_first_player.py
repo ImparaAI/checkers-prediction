@@ -1,6 +1,6 @@
 import unittest
 from checkers.game import Game
-from app.model.action_space import get_action_index
+from app.model.checkers.action_space import get_action_index
 
 class test_first_player(unittest.TestCase):
 

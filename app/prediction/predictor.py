@@ -3,8 +3,8 @@ from copy import deepcopy
 from checkers.game import Game
 from montecarlo.node import Node
 from app.model.model import Model
-from app.model import action_space
-from app.model import input_builder
+from app.model.checkers import action_space
+from app.model.checkers import input_builder
 from montecarlo.montecarlo import MonteCarlo
 
 def predict(moves):
