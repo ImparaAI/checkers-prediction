@@ -21,6 +21,7 @@ def predict(moves):
 def child_finder(node):
 	model = Model((34, 8, 4), 8 * 8 * 4)
 	prediction = model.predict(np.array([input_builder.build(node.state)]))
+	#need to multiplie win_value by -1 if this is the opponents turn
 	node.update_win_value(prediction['win_value'])
 
 	for move in node.state.get_possible_moves():
@@ -28,13 +29,13 @@ def child_finder(node):
 		node.add_child(child)
 
 def build_child(parent, move, action_probabilities):
-		child = Node(deepcopy(parent.state))
-		child.state.move(move)
+	child = Node(deepcopy(parent.state))
+	child.state.move(move)
 
-		action_index = action_space.get_action_index(parent.state, move)
-		child.policy_value = action_probabilities[action_index]
+	action_index = action_space.get_action_index(parent.state, move)
+	child.policy_value = action_probabilities[action_index]
 
-		return child
+	return child
 
 def build_game(moves):
 	game = Game()
