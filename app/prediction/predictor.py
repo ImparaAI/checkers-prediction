@@ -7,22 +7,23 @@ from app.model.checkers import action_space
 from app.model.checkers import input_builder
 from montecarlo.montecarlo import MonteCarlo
 
-def predict(moves):
+def predict(moves, simulation_count = 5):
 	game = build_game(moves)
 	montecarlo = MonteCarlo(Node(game))
 	montecarlo.child_finder = child_finder
 
-	montecarlo.simulate(5)
+	montecarlo.simulate(simulation_count)
 
 	chosen_node = montecarlo.make_choice()
 
 	return chosen_node.state.moves[-1]
 
-def child_finder(node):
+def child_finder(node, montecarlo):
 	model = Model((34, 8, 4), 8 * 8 * 4)
 	prediction = model.predict(np.array([input_builder.build(node.state)]))
-	#need to multiplie win_value by -1 if this is the opponents turn
-	node.update_win_value(prediction['win_value'])
+	is_current_player = node.state.whose_turn() == montecarlo.root_node.state.whose_turn()
+
+	node.update_win_value(prediction['win_value'] * (1 if is_current_player else -1))
 
 	for move in node.state.get_possible_moves():
 		child = build_child(node, move, prediction['action_probabilities'])
