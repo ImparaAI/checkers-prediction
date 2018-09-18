@@ -34,12 +34,12 @@ def get_direction(from_row, from_column, to_row, to_column, player_turn):
 		-1: {
 			0: NORTH_WEST_MOVE if from_row % 2 == 0 else NORTH_EAST_MOVE,
 			-1: None if from_row % 2 == 0 else NORTH_WEST_MOVE,
-			1: NORTH_EAST_MOVE if from_row % 2 == 0 else None ,
+			1: NORTH_EAST_MOVE if from_row % 2 == 0 else None,
 		},
 		1: {
 			0: SOUTH_WEST_MOVE if from_row % 2 == 0 else SOUTH_EAST_MOVE,
 			-1: None if from_row % 2 == 0 else SOUTH_WEST_MOVE,
-			1: SOUTH_EAST_MOVE if from_row % 2 == 0 else None ,
+			1: SOUTH_EAST_MOVE if from_row % 2 == 0 else None,
 		},
 		-2: {
 			0: None,
