@@ -1,11 +1,12 @@
 import random
-from copy import deepcopy
+from app.player import Player
 from checkers.game import Game
+from app.model.checkers import model as checkers_model
 
 class Runner:
 
 	def __init__(self):
-		self.model = Model()
+		self.model = checkers_model.build()
 		self.game = None
 		self.lessons = []
 		self.batches = 20
@@ -29,7 +30,7 @@ class Runner:
 
 	def play_turn(self):
 		player = self.player1 if self.game.whose_turn() == 1 else self.player2
-		move = player.choose_move()
+		move = player.simulate().get_next_move()
 
 		self.lessons.append(Lesson(player.montecarlo.root_node))
 		self.move(move)
