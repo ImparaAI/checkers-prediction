@@ -1,6 +1,6 @@
 import numpy as np
+from . import keras_model
 from .hyperparameters import HyperParameters
-from .keras_model_builder import KerasModelBuilder
 
 class Model:
 
@@ -8,7 +8,7 @@ class Model:
 		self.input_dimensions = input_dimensions
 		self.output_dimensions = output_dimensions
 		self.hyperparameters = hyperparameters or HyperParameters()
-		self.keras_model = KerasModelBuilder(input_dimensions, output_dimensions, self.hyperparameters).build()
+		self.keras_model = keras_model.build(input_dimensions, output_dimensions, self.hyperparameters)
 
 	def predict(self, prediction_input):
 		output = self.keras_model.predict(prediction_input)
