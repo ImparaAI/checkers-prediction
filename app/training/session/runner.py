@@ -1,15 +1,15 @@
+import random
 from copy import deepcopy
 from checkers.game import Game
-from montecarlo.node import Node
-from app.model.model import Model
-from montecarlo.montecarlo import MonteCarlo
 
 class Runner:
 
 	def __init__(self):
 		self.model = Model()
 		self.game = None
-		self.montecarlo = None
+		self.lessons = []
+		self.batches = 20
+		self.batch_size = 200
 
 	def run(self):
 		for i in range(1000):
@@ -19,18 +19,40 @@ class Runner:
 
 	def play_game(self):
 		self.game = Game()
-		self.montecarlo = MonteCarlo(Node(self.game))
-		self.montecarlo.child_finder = self.child_finder
+		self.player1 = Player(1, self.game, self.model)
+		self.player2 = Player(2, self.game, self.model)
 
 		while not self.game.is_over():
 			self.play_turn()
 
-		self.store_game_training_data()
+		self.set_lesson_winners()
 
 	def play_turn(self):
-		for i in range(50):
-			montecarlo.simulate()
+		player = self.player1 if self.game.whose_turn() == 1 else self.player2
+		move = player.choose_move()
 
-		chosen_node = montecarlo.make_choice()
-		self.montecarlo.change_root_node(chosen_node)
-		self.game.move(chosen_node.state.moves[-1])
+		self.lessons.append(Lesson(player.montecarlo.root_node))
+		self.move(move)
+
+	def move(self, move):
+		self.game.move(move)
+		self.player1.move(move)
+		self.player2.move(move)
+
+	def set_lesson_winners(self):
+		winner = self.game.get_winner()
+
+		for lesson in self.lessons:
+			lesson.update_winner(winner)
+
+	def train(self):
+		for i in range(self.batches):
+			batch_lessons = random.sample(self.lessons, min(self.batch_size, len(self.lessons)))
+			inputs, win_values, action_probabilities = ([], [], [])
+
+			for lesson in batch_lessons:
+				inputs.append(lesson.input)
+				win_values.append(lesson.input)
+				action_probabilities.append(lesson.input)
+
+			self.model.train(inputs, win_values, action_probabilities)
