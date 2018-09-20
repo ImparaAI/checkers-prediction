@@ -14,8 +14,10 @@ class Runner:
 		self.batch_size = 200
 
 	def run(self):
-		for i in range(1000):
+		for i in range(3):
+			print('game ' + str(i) + ' starting')
 			self.play_game()
+			print('game ' + str(i) + ' over')
 
 		self.train()
 
@@ -34,7 +36,13 @@ class Runner:
 		move = player.simulate().get_next_move()
 
 		self.lessons.append(Lesson(player.montecarlo.root_node))
+
+		if move not in self.game.get_possible_moves():
+			for child in player.montecarlo.root_node.children:
+				print('unallowed move', child.state.moves[-1], child.get_score())
+
 		self.move(move)
+		print('moved', move)
 
 	def move(self, move):
 		self.game.move(move)

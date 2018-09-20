@@ -6,6 +6,8 @@ from app.model.checkers import action_space
 from app.model.checkers import input_builder
 from montecarlo.montecarlo import MonteCarlo
 
+import random
+
 class Player:
 
 	def __init__(self, number, game, model):
@@ -18,7 +20,11 @@ class Player:
 	def simulate(self, simulation_count = 5):
 		self.check_turn()
 
-		self.montecarlo.simulate(simulation_count)
+		try:
+			self.montecarlo.simulate(simulation_count)
+		except IndexError:
+			print(self.game.get_possible_moves())
+			raise ValueError('ok things are bad')
 
 		return self
 
@@ -30,10 +36,16 @@ class Player:
 		return chosen_node.state.moves[-1]
 
 	def move(self, move):
-		for child in self.montecarlo.children:
+		found = False
+
+		for child in self.montecarlo.root_node.children:
 			if move == child.state.moves[-1]:
 				self.montecarlo.root_node = child
+				found = True
 				break
+
+		if not found:
+			print('couldnt find child matching move', move, self.montecarlo.root_node.children)
 
 	def check_turn(self):
 		if self.number != self.game.whose_turn():
@@ -52,6 +64,7 @@ class Player:
 	def build_child(self, parent, move, action_probabilities):
 		child = Node(deepcopy(parent.state))
 		child.state.move(move)
+		child.move = move
 
 		action_index = action_space.get_action_index(parent.state, move)
 		child.policy_value = action_probabilities[action_index]
