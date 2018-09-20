@@ -1,4 +1,5 @@
 import random
+from .lesson import Lesson
 from app.player import Player
 from checkers.game import Game
 from app.model.checkers import model as checkers_model
@@ -57,3 +58,5 @@ class Runner:
 				action_probabilities.append(lesson.input)
 
 			self.model.train(inputs, win_values, action_probabilities)
+
+		self.model.save('/data/checkers_model.h5')

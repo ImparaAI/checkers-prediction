@@ -1,5 +1,4 @@
 import numpy as np
-import tensorflow as tf
 from app.model.checkers.action_space import get_action_index
 from app.model.checkers.input_builder import build as build_input
 
@@ -12,7 +11,7 @@ class Lesson:
 		self.action_probabilities = self.build_action_probabilities(node)
 
 	def build_action_probabilities(self, node):
-		probabilities = tf.zeros(shape = 8 * node.state.board.height * node.state.board.width, dtype = tf.float32)
+		probabilities = np.zeros(shape = 8 * node.state.board.height * node.state.board.width, dtype = np.float32)
 
 		for child in node.children:
 			index = get_action_index(node.state, child.state.moves[-1])
