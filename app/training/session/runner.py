@@ -62,8 +62,8 @@ class Runner:
 
 			for lesson in batch_lessons:
 				inputs.append(lesson.input)
-				win_values.append(lesson.input)
-				action_probabilities.append(lesson.input)
+				win_values.append(lesson.win_value)
+				action_probabilities.append(lesson.action_probabilities)
 
 			self.model.train(inputs, win_values, action_probabilities)
 

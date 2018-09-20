@@ -24,4 +24,4 @@ class Model:
 			'policy_head': np.array(action_probabilities)
 		}
 
-		self.keras_model.fit(inputs, outputs)
+		self.keras_model.fit(np.array(inputs), outputs)
