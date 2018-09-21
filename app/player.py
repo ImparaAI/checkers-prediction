@@ -33,13 +33,16 @@ class Player:
 
 		chosen_node = self.montecarlo.make_choice()
 
-		return chosen_node.state.moves[-1]
+		return chosen_node.move
 
 	def move(self, move):
 		found = False
 
+		if not self.montecarlo.root_node.expanded:
+			self.add_child_to_parent(self.montecarlo.root_node, move)
+
 		for child in self.montecarlo.root_node.children:
-			if move == child.state.moves[-1]:
+			if move == child.move:
 				self.montecarlo.root_node = child
 				found = True
 				break
@@ -58,15 +61,15 @@ class Player:
 		node.update_win_value(prediction['win_value'] * (1 if is_current_player else -1))
 
 		for move in node.state.get_possible_moves():
-			child = self.build_child(node, move, prediction['action_probabilities'])
-			node.add_child(child)
+			child = self.add_child_to_parent(node, move)
+			action_index = action_space.get_action_index(node.state, move)
+			child.policy_value = prediction['action_probabilities'][action_index]
 
-	def build_child(self, parent, move, action_probabilities):
+	def add_child_to_parent(self, parent, move):
 		child = Node(deepcopy(parent.state))
 		child.state.move(move)
 		child.move = move
 
-		action_index = action_space.get_action_index(parent.state, move)
-		child.policy_value = action_probabilities[action_index]
+		parent.add_child(child)
 
 		return child

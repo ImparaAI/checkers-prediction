@@ -45,9 +45,9 @@ class Runner:
 		print('moved', move)
 
 	def move(self, move):
-		self.game.move(move)
 		self.player1.move(move)
 		self.player2.move(move)
+		self.game.move(move)
 
 	def set_lesson_winners(self):
 		winner = self.game.get_winner()
