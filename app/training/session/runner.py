@@ -39,7 +39,7 @@ class Runner:
 
 		if move not in self.game.get_possible_moves():
 			for child in player.montecarlo.root_node.children:
-				print('unallowed move', child.state.moves[-1], child.get_score())
+				print('unallowed move', child.move, child.get_score())
 
 		self.move(move)
 		print('moved', move)
