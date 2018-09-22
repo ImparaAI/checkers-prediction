@@ -25,3 +25,6 @@ class Model:
 		}
 
 		self.keras_model.fit(np.array(inputs), outputs)
+
+	def save(self, filepath):
+		self.keras_model.save(filepath)

@@ -20,4 +20,4 @@ class Lesson:
 		return probabilities
 
 	def update_winner(self, winner):
-		self.win_value = 0 if winner == None else (1 if winner == player_turn else -1)
+		self.win_value = 0 if winner == None else (1 if winner == self.player_turn else -1)

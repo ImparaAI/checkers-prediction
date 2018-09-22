@@ -14,47 +14,42 @@ class Player:
 		self.number = number
 		self.game = game
 		self.model = model
-		self.montecarlo = MonteCarlo(Node(game))
-		self.montecarlo.child_finder = self.montecarlo_child_finder
+		self.montecarlo = self.build_montecarlo()
+
+	def build_montecarlo(self):
+		root_node = Node(self.game)
+		root_node.player_number = self.game.whose_turn()
+
+		montecarlo = MonteCarlo(root_node)
+		montecarlo.child_finder = self.montecarlo_child_finder
+
+		return montecarlo
 
 	def simulate(self, simulation_count = 5):
-		self.check_turn()
-
-		try:
-			self.montecarlo.simulate(simulation_count)
-		except IndexError:
-			print(self.game.get_possible_moves())
-			raise ValueError('ok things are bad')
+		self.montecarlo.simulate(simulation_count)
 
 		return self
 
 	def get_next_move(self):
-		self.check_turn()
-
 		chosen_node = self.montecarlo.make_choice()
 
-		return chosen_node.move
+		return chosen_node.state.moves[-1]
 
 	def move(self, move):
-		found = False
-
 		if not self.montecarlo.root_node.expanded:
 			self.add_child_to_parent(self.montecarlo.root_node, move)
 
 		for child in self.montecarlo.root_node.children:
-			if move == child.move:
+			if move == child.state.moves[-1]:
 				self.montecarlo.root_node = child
-				found = True
 				break
 
-		if not found:
-			print('couldnt find child matching move', move, self.montecarlo.root_node.children)
-
-	def check_turn(self):
-		if self.number != self.game.whose_turn():
-			raise ValueError("It isn't this player's turn")
-
 	def montecarlo_child_finder(self, node, montecarlo):
+		if node.state.is_over():
+			win_value = self.get_end_game_win_value(node.state, montecarlo)
+			node.update_win_value(win_value)
+			return
+
 		prediction = self.model.predict(np.array([input_builder.build(node.state)]))
 		is_current_player = node.state.whose_turn() == montecarlo.root_node.state.whose_turn()
 
@@ -68,8 +63,16 @@ class Player:
 	def add_child_to_parent(self, parent, move):
 		child = Node(deepcopy(parent.state))
 		child.state.move(move)
-		child.move = move
+		child.player_number = child.state.whose_turn()
 
 		parent.add_child(child)
 
 		return child
+
+	def get_end_game_win_value(self, state, montecarlo):
+		winner = state.get_winner()
+
+		if winner == None:
+			return 0
+
+		return 1 if winner == montecarlo.root_node.state.whose_turn() else -1
