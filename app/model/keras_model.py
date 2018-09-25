@@ -1,5 +1,6 @@
 import tensorflow as tf
 from pathlib import Path
+from keras import backend
 from keras import regularizers
 from keras.optimizers import SGD
 from keras.models import load_model, Model as KerasModel
@@ -17,6 +18,8 @@ class Builder:
 		self.hyperparameters = hyperparameters
 
 	def build(self):
+		backend.clear_session()
+
 		if Path(self.weights_file_path).is_file():
 			return load_model(self.weights_file_path, custom_objects = {'keras_policy_head_loss': keras_policy_head_loss})
 
