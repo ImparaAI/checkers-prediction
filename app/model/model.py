@@ -4,11 +4,12 @@ from .hyperparameters import HyperParameters
 
 class Model:
 
-	def __init__(self, input_dimensions, output_dimensions, hyperparameters = None):
+	def __init__(self, weights_file_path, input_dimensions, output_dimensions, hyperparameters = None):
+		self.weights_file_path = weights_file_path
 		self.input_dimensions = input_dimensions
 		self.output_dimensions = output_dimensions
 		self.hyperparameters = hyperparameters or HyperParameters()
-		self.keras_model = keras_model.build(input_dimensions, output_dimensions, self.hyperparameters)
+		self.keras_model = keras_model.build(weights_file_path, input_dimensions, output_dimensions, self.hyperparameters)
 
 	def predict(self, prediction_input):
 		output = self.keras_model.predict(prediction_input)
@@ -26,5 +27,5 @@ class Model:
 
 		self.keras_model.fit(np.array(inputs), outputs)
 
-	def save(self, filepath):
-		self.keras_model.save(filepath)
+	def save(self):
+		self.keras_model.save(self.weights_file_path)

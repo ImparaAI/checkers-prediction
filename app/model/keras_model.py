@@ -1,20 +1,25 @@
 import tensorflow as tf
+from pathlib import Path
 from keras import regularizers
 from keras.optimizers import SGD
-from keras.models import Model as KerasModel
+from keras.models import load_model, Model as KerasModel
 from keras.layers import add, BatchNormalization, Conv2D, Dense, Flatten, Input, LeakyReLU
 
-def build(input_dimensions, output_dimensions, hyperparameters):
-	return Builder(input_dimensions, output_dimensions, hyperparameters).build()
+def build(weights_file_path, input_dimensions, output_dimensions, hyperparameters):
+	return Builder(weights_file_path, input_dimensions, output_dimensions, hyperparameters).build()
 
 class Builder:
 
-	def __init__(self, input_dimensions, output_dimensions, hyperparameters):
+	def __init__(self, weights_file_path, input_dimensions, output_dimensions, hyperparameters):
+		self.weights_file_path = weights_file_path
 		self.input_dimensions = input_dimensions
 		self.output_dimensions = output_dimensions
 		self.hyperparameters = hyperparameters
 
 	def build(self):
+		if Path(self.weights_file_path).is_file():
+			return load_model(self.weights_file_path, custom_objects = {'keras_policy_head_loss': keras_policy_head_loss})
+
 		input_layer = Input(shape = self.input_dimensions)
 
 		stack = self.build_shared_stack(input_layer)
@@ -24,7 +29,7 @@ class Builder:
 		keras_model = KerasModel(inputs = [input_layer], outputs = [value_head, policy_head])
 
 		keras_model.compile(
-			loss = {'value_head': 'mean_squared_error', 'policy_head': self.keras_policy_head_loss},
+			loss = {'value_head': 'mean_squared_error', 'policy_head': keras_policy_head_loss},
 			optimizer = SGD(lr = self.hyperparameters.learning_rate, momentum = self.hyperparameters.momentum),
 			loss_weights = {'value_head': 0.5, 'policy_head': 0.5}
 		)
@@ -132,14 +137,14 @@ class Builder:
 
 		return x
 
-	def keras_policy_head_loss(self, y_true, y_pred):
-		predictions = y_pred
-		labels = y_true
+def keras_policy_head_loss(y_true, y_pred):
+	predictions = y_pred
+	labels = y_true
 
-		zeros = tf.zeros(shape = tf.shape(labels), dtype = tf.float32)
-		where = tf.equal(labels, zeros)
+	zeros = tf.zeros(shape = tf.shape(labels), dtype = tf.float32)
+	where = tf.equal(labels, zeros)
 
-		negatives = tf.fill(tf.shape(labels), -100.0)
-		logits = tf.where(where, negatives, predictions)
+	negatives = tf.fill(tf.shape(labels), -100.0)
+	logits = tf.where(where, negatives, predictions)
 
-		return tf.nn.softmax_cross_entropy_with_logits_v2(labels = labels, logits = logits)
+	return tf.nn.softmax_cross_entropy_with_logits_v2(labels = labels, logits = logits)

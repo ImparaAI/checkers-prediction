@@ -1,8 +1,28 @@
 def stop_active_sessions():
-	return 1
+	pass
 
 def create_new_session():
-	return 1
+	pass
 
-def get_active_session():
-	return 1
+def get_next_session():
+	return {
+		'id': 1,
+		'name': 'init',
+		'secondsLimit': 600
+	}
+
+def activate(id, time):
+	pass
+
+def is_active(id):
+	return True
+
+def deactivate_session(id, time):
+	pass
+
+def get_latest_session():
+	return {
+		'id': 1,
+		'name': 'init',
+		'secondsLimit': 600
+	}
