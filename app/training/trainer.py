@@ -10,7 +10,6 @@ def train(model_name):
 class Trainer:
 
 	def __init__(self, model_name):
-		self.model_name = model_name
 		self.model = checkers_model.build(model_name)
 		self.game = None
 		self.lessons = []
