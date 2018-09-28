@@ -2,4 +2,4 @@
 
 touch /var/healthy
 
-supervisord -c /etc/supervisor.d/supervisord.ini
+circusd /etc/circus/circus.ini
