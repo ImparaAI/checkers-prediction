@@ -2,7 +2,7 @@ A Python Flask app that uses unsupervised learning to train a neural network to 
 
 There are two endpoints: `/train` and `/predict`. These can be used to retrain the AI and predict the best move for a given board state. If no training has yet occurred, the AI will predict a random move.
 
-This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster as defined [here](https://github.com/ImparaAI/checkers-kubernetes).
+This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster [here](https://github.com/ImparaAI/checkers-kubernetes).
 
 # Routes
 
