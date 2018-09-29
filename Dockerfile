@@ -5,6 +5,7 @@ RUN apt-get update -y && apt-get upgrade -y && \
 		bash \
 		python3 \
 		python3-pip && \
+		default-libmysqlclient-dev && \
 	apt-get clean && \
 	apt-get autoremove && \
 	rm -rf /var/lib/apt/lists/* && \
