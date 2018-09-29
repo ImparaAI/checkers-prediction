@@ -9,12 +9,14 @@ def run():
 		return
 
 	start_time = time.time()
-	storage.activate(session['id'], start_time)
+	storage.activate(session['id'])
+	episodes_per_training = 5
 
 	while not time_limit_reached(start_time, session) and storage.is_active(session['id']):
-		trainer.train(session['name'])
+		trainer.train(session['name'], episodes_per_training)
+		storage.boost_episode_count(session['id'], episodes_per_training)
 
-	storage.deactivate_session(session['id'], time.time())
+	storage.finish(session['id'])
 
 def time_limit_reached(start_time, session):
 	session_limit = session['secondsLimit']

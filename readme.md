@@ -1,15 +1,8 @@
 A Python Flask app that uses unsupervised learning to train a neural network to learn how to play checkers (aka draughts).
 
-There are two endpoints: `/train` and `/predict`. These can be used to retrain the AI and predict the best move for a given board state. If no training has yet occurred, the AI will predict a random move.
-
-This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster [here](https://github.com/ImparaAI/checkers-kubernetes).
+This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster [here](https://github.com/ImparaAI/checkers-kubernetes). This app receives requests from the web app to restart the training, predict a move, or analyze previous training sessions. A mysql database is used for organizing the sessions and a cron flask script is used to perform the training runs.
 
 # Routes
-
-## /train
-Method: `POST`
-
-Input: `episodes=int, time_limit_in_seconds=int`
 
 ## /predict
 Method: `GET`
@@ -17,6 +10,14 @@ Method: `GET`
 Input: `moves=[[int, int], [int, int], ...]`
 
 Output: `[int, int]`
+
+## /training/session
+Method: `POST`
+
+Input: `episodes=int, time_limit_in_seconds=int`
+
+## /training/sessions
+Method: `GET`
 
 # Assumptions
 

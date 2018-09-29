@@ -4,8 +4,8 @@ from app.player import Player
 from checkers.game import Game
 from app.model.checkers import model as checkers_model
 
-def train(model_name):
-	Trainer(model_name).train()
+def train(model_name, episodes = 5):
+	Trainer(model_name).train(episodes)
 
 class Trainer:
 
@@ -16,9 +16,8 @@ class Trainer:
 		self.batches = 20
 		self.batch_size = 200
 
-	def train(self):
-		for i in range(3):
-			print('game ' + str(i) + ' starting')
+	def train(self, episodes):
+		for i in range(episodes):
 			self.play_game()
 			print('game ' + str(i) + ' over')
 

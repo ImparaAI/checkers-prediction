@@ -1,11 +1,41 @@
 import MySQLdb
 from flask import current_app, g
 
-def get_database():
-	if 'db' not in g:
-		g.db = MySQLdb.connect(host = 'mysql')
+def get_connection(connect_to_database = True):
+	if 'db' in g:
+		return g.db
 
-	return g.db
+	db = MySQLdb.connect(host = 'mysql', db = 'prediction') if connect_to_database else MySQLdb.connect(host = 'mysql')
+	db.autocommit(True)
+
+	if connect_to_database:
+		g.db = db
+
+	return db
+
+def get_cursor():
+	return get_connection().cursor()
+
+def execute(sql, args = None):
+	cursor = get_cursor()
+	cursor.execute(sql, args)
+	cursor.close()
+
+def fetchone(sql, args = None):
+	cursor = get_cursor()
+	cursor.execute(sql, args)
+	result = cursor.fetchone()
+	cursor.close()
+
+	return result
+
+def fetchall(sql, args = None):
+	cursor = get_cursor()
+	cursor.execute(sql, args)
+	result = cursor.fetchall()
+	cursor.close()
+
+	return result
 
 def close_database(e = None):
 	db = g.pop('db', None)
@@ -14,7 +44,7 @@ def close_database(e = None):
 		db.close()
 
 def initialize():
-	db = get_database()
+	db = get_connection(connect_to_database = False)
 
 	if database_already_initialized():
 		return False
@@ -27,7 +57,7 @@ def initialize():
 	return True
 
 def database_already_initialized():
-	cursor = get_database().cursor()
+	cursor = get_connection().cursor()
 	cursor.execute("SHOW DATABASES LIKE 'prediction'")
 
 	return not not cursor.fetchone()
