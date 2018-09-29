@@ -1,14 +1,16 @@
 #!/bin/bash
 
-touch /var/healthy
-
 cd /var/app
 
 echo "Attempting to initialize the database..."
 
-until flask database:initialize
+until flask database:initialize > /dev/null
 do
 	echo "Database initialization failed, retrying until success..."
 done
+
+echo "Database initialized"
+
+touch /var/healthy
 
 circusd /etc/circus/circus.ini
