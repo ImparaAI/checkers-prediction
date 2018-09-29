@@ -19,6 +19,26 @@ Input: `episodes=int, time_limit_in_seconds=int`
 ## /training/sessions
 Method: `GET`
 
+# Commands
+
+All commands can be run from the app root. If you are running this in the docker container, you don't need to worry about these as they are handled automatically.
+
+## Initialize database
+
+```
+flask database:initialize
+```
+
+This only needs to be run if the database is not initialized, otherwise nothing will happen. The docker start script runs this on container startup.
+
+## Run the next training session
+
+```
+flask training_session:run
+```
+
+Runs the next available training session. If a session is currently training, this will do nothing. This is run on a per-minute cron job in the docker container.
+
 # Assumptions
 
 The rules used are those defined by [our checkers library](https://github.com/ImparaAI/checkers). Importantly, each piece movement is completely distinct, with chained captures taking place over multiple turns where the player turn stays the same.
