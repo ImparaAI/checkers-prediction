@@ -57,7 +57,7 @@ def initialize():
 	return True
 
 def database_already_initialized():
-	cursor = get_connection().cursor()
+	cursor = get_connection(connect_to_database = False).cursor()
 	cursor.execute("SHOW DATABASES LIKE 'prediction'")
 
 	return not not cursor.fetchone()
