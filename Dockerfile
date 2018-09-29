@@ -19,6 +19,7 @@ RUN pip3 install -U \
 	tensorflow \
 	keras \
 	flask \
+	mysqlclient \
 	imparaai-checkers \
 	imparaai-montecarlo
 
@@ -41,5 +42,8 @@ EXPOSE 80
 
 ENV TERM xterm-color
 ENV TF_CPP_MIN_LOG_LEVEL 2 #disables cpu compile warnings
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV FLASK_APP main.py
 
 CMD ["sh", "/bin/start.sh"]
