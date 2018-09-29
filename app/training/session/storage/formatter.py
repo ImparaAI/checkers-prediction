@@ -6,8 +6,14 @@ def format_many(sessions):
 def format(session):
 	date_format = '%Y-%m-%d %H:%M:%S'
 
-	print(session)
-
 	return {
-		'startTime': datetime.datetime.strptime(date, date_format)
+		'id': session[0],
+		'name': session[1],
+		'episodeCount': session[2],
+		'episodeLimit': session[3],
+		'secondsLimit': session[4],
+		'deactivated': bool(session[5]),
+		'startTime': session[6],
+		'endTime': session[7],
+		'createdAt': session[8]
 	}
