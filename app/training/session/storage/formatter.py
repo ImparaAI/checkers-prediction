@@ -1,11 +1,9 @@
 import datetime
 
 def format_many(sessions):
-	pass
+	return list(map(lambda session: format(session), sessions))
 
 def format(session):
-	date_format = '%Y-%m-%d %H:%M:%S'
-
 	return {
 		'id': session[0],
 		'name': session[1],
@@ -13,7 +11,13 @@ def format(session):
 		'episodeLimit': session[3],
 		'secondsLimit': session[4],
 		'deactivated': bool(session[5]),
-		'startTime': session[6],
-		'endTime': session[7],
-		'createdAt': session[8]
+		'startTime': format_time(session[6]),
+		'endTime': format_time(session[7]),
+		'createdAt': format_time(session[8])
 	}
+
+def format_time(value):
+	if not value:
+		return value
+
+	return value.strftime('%Y-%m-%d %H:%M:%S')
