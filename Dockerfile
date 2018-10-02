@@ -32,8 +32,7 @@ RUN ln -snf /bin/bash /bin/sh && \
 	find /usr/lib/python3 -name __pycache__ | xargs rm -r && \
 	sed -i -e 's/\r$//' /root/.bashrc && \
     tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
-    chmod -R 700 /bin/start.sh && \
-    mkdir /data
+    chmod -R 700 /bin/start.sh
 
 COPY . /var/app
 
