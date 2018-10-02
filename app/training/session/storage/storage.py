@@ -47,7 +47,7 @@ def finish(id):
 	database.execute("UPDATE training_sessions SET endTime = %s WHERE id = %s", (time, id))
 
 def get_latest_session():
-	session = database.fetchone("SELECT * FROM training_sessions WHERE startTime IS NOT NULL ORDER BY startTime")
+	session = database.fetchone("SELECT * FROM training_sessions WHERE episodeCount > 0 ORDER BY startTime DESC")
 
 	if session:
 		return formatter.format(session)
