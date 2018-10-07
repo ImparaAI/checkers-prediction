@@ -13,8 +13,8 @@ class Trainer:
 		self.model = checkers_model.build(model_name)
 		self.game = None
 		self.lessons = []
-		self.batches = 20
-		self.batch_size = 200
+		self.max_batch_size = 1024
+		self.preferred_batch_count = 20
 
 	def train(self, episodes):
 		for i in range(episodes):
@@ -54,15 +54,24 @@ class Trainer:
 			lesson.update_winner(winner)
 
 	def update_model(self):
-		for i in range(self.batches):
-			batch_lessons = random.sample(self.lessons, min(self.batch_size, len(self.lessons)))
-			inputs, win_values, action_probabilities = ([], [], [])
+		batch_size = min(self.max_batch_size, len(self.lessons) // self.preferred_batch_count)
+		random.shuffle(self.lessons)
+		print('batch_size: ' + str(batch_size) )
 
-			for lesson in batch_lessons:
+		while len(self.lessons):
+			inputs, win_values, action_probabilities = self.build_training_values(batch_size)
+			self.model.train(inputs, win_values, action_probabilities)
+
+		self.model.save()
+
+	def build_training_values(self, batch_size):
+		inputs, win_values, action_probabilities = ([], [], [])
+
+		for x in range(1, batch_size):
+			if len(self.lessons):
+				lesson = self.lessons.pop()
 				inputs.append(lesson.input)
 				win_values.append(lesson.win_value)
 				action_probabilities.append(lesson.action_probabilities)
 
-			self.model.train(inputs, win_values, action_probabilities)
-
-		self.model.save()
+		return inputs, win_values, action_probabilities
