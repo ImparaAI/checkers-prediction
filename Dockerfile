@@ -12,10 +12,13 @@ RUN apt-get update -y && apt-get upgrade -y && \
 	rm -f /var/cache/apt/archives/*.deb /var/cache/apt/archives/partial/*.deb /var/cache/apt/*.bin
 
 RUN pip3 install -U \
+	pip \
 	setuptools \
 	circus \
 	chaussette \
 	keras \
+	tensorflow \
+	tensorflow-gpu \
 	flask \
 	mysqlclient \
 	imparaai-checkers \
