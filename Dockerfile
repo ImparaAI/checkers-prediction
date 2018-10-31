@@ -17,8 +17,6 @@ RUN pip3 install -U \
 	circus \
 	chaussette \
 	keras \
-	tensorflow \
-	tensorflow-gpu \
 	flask \
 	mysqlclient \
 	imparaai-checkers \
