@@ -118,7 +118,7 @@ class Builder:
 	def build_policy_head(self, x):
 		x = Conv2D(
 			filters = 2,
-			kernel_size = (1,1),
+			kernel_size = (1, 1),
 			data_format = "channels_first",
 			padding = 'same',
 			use_bias = False,
