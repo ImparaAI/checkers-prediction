@@ -16,7 +16,9 @@ RUN pip3 install -U \
 	setuptools \
 	circus \
 	chaussette \
-	keras \
+	libcudnn7=7.2.1.38-1+cuda9.0 \
+	libnccl2=2.2.13-1+cuda9.0 \
+	keras==2.1 \
 	flask \
 	mysqlclient \
 	imparaai-checkers \
