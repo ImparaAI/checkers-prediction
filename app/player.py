@@ -63,6 +63,7 @@ class Player:
 	def add_child_to_parent(self, parent, move):
 		child = Node(deepcopy(parent.state))
 		child.state.move(move)
+		child.state.boards = child.state.boards[-8:]
 		child.player_number = child.state.whose_turn()
 
 		parent.add_child(child)
