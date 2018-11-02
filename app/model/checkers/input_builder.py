@@ -1,17 +1,18 @@
 import numpy as np
 
-def build(game):
-	return InputBuilder(game).build()
+def build(game, recent_boards = None):
+	return InputBuilder(game, recent_boards).build()
 
 class InputBuilder:
 
-	def __init__(self, game):
+	def __init__(self, game, recent_boards):
 		self.game = game
+		self.recent_boards = recent_boards if recent_boards else game.boards[-8:]
 		self.player_turn = game.whose_turn()
 		self.input = np.zeros((34, self.game.board.height, self.game.board.width), dtype = np.int)
 
 	def build(self):
-		for board_index, board in enumerate(reversed(self.game.boards[-8:])):
+		for board_index, board in enumerate(reversed(self.recent_boards)):
 			board_planes = self.build_board_planes(board)
 
 			self.input[board_index] = board_planes[0]

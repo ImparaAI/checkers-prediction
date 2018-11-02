@@ -4,8 +4,8 @@ from app.model.checkers.input_builder import build as build_input
 
 class Lesson:
 
-	def __init__(self, node):
-		self.input = build_input(node.state)
+	def __init__(self, node, recent_boards):
+		self.input = build_input(node.state, recent_boards)
 		self.win_value = None
 		self.player_turn = node.state.whose_turn()
 		self.action_probabilities = self.build_action_probabilities(node)

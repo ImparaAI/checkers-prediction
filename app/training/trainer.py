@@ -12,6 +12,7 @@ class Trainer:
 	def __init__(self, model_name):
 		self.model = checkers_model.build(model_name)
 		self.game = None
+		self.game_boards = []
 		self.lessons = []
 		self.max_batch_size = 1024
 		self.preferred_batch_count = 20
@@ -25,6 +26,7 @@ class Trainer:
 
 	def play_game(self):
 		self.game = Game()
+		self.game_boards = []
 		self.player1 = Player(1, self.game, self.model)
 		self.player2 = Player(2, self.game, self.model)
 
@@ -37,10 +39,10 @@ class Trainer:
 		player = self.player1 if self.game.whose_turn() == 1 else self.player2
 		move = player.simulate().get_next_move()
 
-		self.lessons.append(Lesson(player.montecarlo.root_node))
+		self.game_boards.append(player.montecarlo.root_node.state.board)
+		self.lessons.append(Lesson(player.montecarlo.root_node, self.game_boards[-8:]))
 
 		self.move(move)
-		print('moved', move)
 
 	def move(self, move):
 		self.player1.move(move)
