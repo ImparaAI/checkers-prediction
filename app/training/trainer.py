@@ -1,8 +1,11 @@
 import random
-from .lesson import Lesson
-from app.player import Player
-from checkers.game import Game
+import multiprocessing
+from .predictor import predict
+from .game_player import play_game
 from app.model.checkers import model as checkers_model
+
+
+import time
 
 def train(model_name, episodes = 5):
 	Trainer(model_name).train(episodes)
@@ -10,61 +13,56 @@ def train(model_name, episodes = 5):
 class Trainer:
 
 	def __init__(self, model_name):
-		self.model = checkers_model.build(model_name)
-		self.game = None
-		self.game_boards = []
+		self.model_name = model_name
 		self.lessons = []
 		self.max_batch_size = 1024
 		self.preferred_batch_count = 20
 
 	def train(self, episodes):
-		for i in range(episodes):
-			self.play_game()
-			print('game ' + str(i) + ' over')
+		lesson_queue = multiprocessing.Queue()
+		prediction_request_queue = multiprocessing.JoinableQueue()
+		prediction_response_queue = multiprocessing.JoinableQueue()
+		prediction_process = multiprocessing.Process(target = predict, args = (self.model_name, prediction_request_queue, prediction_response_queue))
+		prediction_process.start()
+		processes = []
 
+		for i in range(episodes):
+			processes.append(multiprocessing.Process(target = play_game, args = (lesson_queue, prediction_request_queue, prediction_response_queue)))
+			processes[-1].start()
+		print('started')
+
+		live_processes = list(processes)
+
+		print('doing')
+		# while live_processes:
+		# 	print(processes[-1].is_alive())
+		# 	live_processes = [process for process in live_processes if process.is_alive()]
+		# 	time.sleep(1)
+
+		for process in processes:
+			process.join()
+		print('finished')
+
+		prediction_request_queue.put(None)
+		prediction_request_queue.join()
+
+		print('hey there')
+		while not lesson_queue.empty():
+			self.lessons.append(lesson_queue.get())
+		print('alrighty')
 		self.update_model()
 
-	def play_game(self):
-		self.game = Game()
-		self.game_boards = []
-		self.player1 = Player(1, self.game, self.model)
-		self.player2 = Player(2, self.game, self.model)
-
-		while not self.game.is_over():
-			self.play_turn()
-
-		self.set_lesson_winners()
-
-	def play_turn(self):
-		player = self.player1 if self.game.whose_turn() == 1 else self.player2
-		move = player.simulate().get_next_move()
-
-		self.game_boards.append(player.montecarlo.root_node.state.board)
-		self.lessons.append(Lesson(player.montecarlo.root_node, self.game_boards[-8:]))
-
-		self.move(move)
-
-	def move(self, move):
-		self.player1.move(move)
-		self.player2.move(move)
-		self.game.move(move)
-
-	def set_lesson_winners(self):
-		winner = self.game.get_winner()
-
-		for lesson in self.lessons:
-			lesson.update_winner(winner)
-
 	def update_model(self):
+		model = checkers_model.build(self.model_name)
 		batch_size = min(self.max_batch_size, len(self.lessons) // self.preferred_batch_count)
 		random.shuffle(self.lessons)
-		print('batch_size: ' + str(batch_size) )
 
 		while len(self.lessons):
 			inputs, win_values, action_probabilities = self.build_training_values(batch_size)
-			self.model.train(inputs, win_values, action_probabilities)
+			model.train(inputs, win_values, action_probabilities)
 
-		self.model.save()
+		model.save()
+		model.close()
 
 	def build_training_values(self, batch_size):
 		inputs, win_values, action_probabilities = ([], [], [])

@@ -36,9 +36,16 @@ def initialize_database():
 def run_training_session():
 	training_session_runner.run()
 
+@click.command('training_session:test')
+@with_appcontext
+def test_training_session():
+	training_session_restarter.restart({'secondsLimit': 500})
+	training_session_runner.run()
+
 app.teardown_appcontext(database.close_database)
 app.cli.add_command(initialize_database)
 app.cli.add_command(run_training_session)
+app.cli.add_command(test_training_session)
 
 if __name__ == '__main__':
 	app.run(host = '0.0.0.0', port = 80, debug = True)
