@@ -10,23 +10,29 @@ player2 = None
 lessons = []
 game_boards = []
 
-def play_game(lesson_queue, prediction_request_queue, prediction_result_queue):
+class MultiprocessModel:
+	def __init__(self, prediction_request):
+		self.prediction_request = prediction_request
+
+	def predict(self, input):
+		self.prediction_request.set_input(input)
+
+		while not self.prediction_request.get_response():
+			continue
+
+		return self.prediction_request.get_response()
+
+def play_games(episode_count, lesson_queue, prediction_request):
+	for i in range(episode_count):
+		play_game(lesson_queue, prediction_request)
+
+def play_game(lesson_queue, prediction_request):
 	startTime = datetime.now()
 	global game, player1, player2
 
-	class Model:
-		def predict(self, input):
-			prediction_request_queue.put(input)
-			prediction_request_queue.join()
-
-			prediction = prediction_result_queue.get()
-			prediction_result_queue.task_done()
-
-			return prediction
-
 	game = Game()
-	player1 = Player(1, game, Model())
-	player2 = Player(2, game, Model())
+	player1 = Player(1, game, MultiprocessModel(prediction_request))
+	player2 = Player(2, game, MultiprocessModel(prediction_request))
 
 	while not game.is_over():
 		play_turn()

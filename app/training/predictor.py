@@ -1,24 +1,18 @@
 import queue
 from app.model.checkers import model as checkers_model
 
-def predict(model_name, prediction_request_queue, prediction_response_queue):
-	print('uhhhh')
+def predict(model_name, prediction_requests, halt_signal):
+	print('predictor starting')
 	model = checkers_model.build(model_name)
-	print('model created')
-	while True:
-		try:
-			prediction_input = prediction_request_queue.get()
-		except queue.Empty:
-			continue
+	print('nn model loaded')
 
-		if type(prediction_input).__name__ == 'ndarray':
-			print('ok predicting')
-			prediction = model.predict(prediction_input)
-			prediction_request_queue.task_done()
-			prediction_response_queue.put(prediction)
-			prediction_response_queue.join()
-		else:
-			print('closing predictor')
+	while True:
+		if halt_signal.value:
+			print('exiting predictor')
 			model.close()
-			prediction_request_queue.task_done()
 			return
+
+		for prediction_request in prediction_requests:
+			if prediction_request.needs_response():
+				prediction = model.predict(prediction_request.get_input())
+				prediction_request.set_response(prediction)

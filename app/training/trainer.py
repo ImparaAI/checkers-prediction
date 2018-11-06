@@ -1,11 +1,10 @@
 import random
 import multiprocessing
 from .predictor import predict
-from .game_player import play_game
+from .game_player import play_games
+from multiprocessing.managers import BaseManager
+from .prediction_request import PredictionRequest
 from app.model.checkers import model as checkers_model
-
-
-import time
 
 def train(model_name, episodes = 5):
 	Trainer(model_name).train(episodes)
@@ -18,39 +17,53 @@ class Trainer:
 		self.max_batch_size = 1024
 		self.preferred_batch_count = 20
 
-	def train(self, episodes):
+	def train(self, episode_count):
+		halt_signal = multiprocessing.Value('i', 0)
 		lesson_queue = multiprocessing.Queue()
-		prediction_request_queue = multiprocessing.JoinableQueue()
-		prediction_response_queue = multiprocessing.JoinableQueue()
-		prediction_process = multiprocessing.Process(target = predict, args = (self.model_name, prediction_request_queue, prediction_response_queue))
+		prediction_process, game_player_processes = self.create_processes(halt_signal, lesson_queue, episode_count)
+
 		prediction_process.start()
-		processes = []
 
-		for i in range(episodes):
-			processes.append(multiprocessing.Process(target = play_game, args = (lesson_queue, prediction_request_queue, prediction_response_queue)))
-			processes[-1].start()
-		print('started')
+		[process.start() for process in game_player_processes]
+		print('all processes started')
+		[process.join() for process in game_player_processes]
+		print('all processes completed')
 
-		live_processes = list(processes)
+		halt_signal.value = 1
 
-		print('doing')
-		# while live_processes:
-		# 	print(processes[-1].is_alive())
-		# 	live_processes = [process for process in live_processes if process.is_alive()]
-		# 	time.sleep(1)
-
-		for process in processes:
-			process.join()
-		print('finished')
-
-		prediction_request_queue.put(None)
-		prediction_request_queue.join()
-
-		print('hey there')
 		while not lesson_queue.empty():
 			self.lessons.append(lesson_queue.get())
-		print('alrighty')
+
 		self.update_model()
+
+	def create_processes(self, halt_signal, lesson_queue, episode_count):
+		player_process_count = multiprocessing.cpu_count() - 1
+		print(player_process_count)
+		prediction_requests = self.build_prediction_requests(player_process_count)
+		prediction_process = multiprocessing.Process(target = predict, args = (self.model_name, prediction_requests, halt_signal))
+		game_player_processes = []
+		episode_counts = self.build_episode_counts(episode_count, player_process_count)
+
+		for i in range(player_process_count):
+			game_player_processes.append(multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], lesson_queue, prediction_requests[i - 1])))
+
+		return prediction_process, game_player_processes
+
+	def build_episode_counts(self, episode_count, process_count):
+		counts = [episode_count // process_count] * process_count
+		left_over = episode_count - sum(counts)
+
+		for i in range(left_over):
+			counts[i - 1] += 1
+
+		return counts
+
+	def build_prediction_requests(self, process_count):
+		BaseManager.register('PredictionRequest', PredictionRequest)
+		manager = BaseManager()
+		manager.start()
+
+		return list(map(lambda i: manager.PredictionRequest(), range(process_count)))
 
 	def update_model(self):
 		model = checkers_model.build(self.model_name)
