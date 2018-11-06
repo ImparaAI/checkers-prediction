@@ -31,4 +31,5 @@ class Model:
 		self.keras_model.save(self.weights_file_path)
 
 	def close(self):
-		self.keras_model.backend.get_session().close()
+		# self.keras_model.backend.get_session().close()
+		pass

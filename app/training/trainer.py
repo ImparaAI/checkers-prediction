@@ -19,34 +19,46 @@ class Trainer:
 
 	def train(self, episode_count):
 		halt_signal = multiprocessing.Value('i', 0)
-		lesson_queue = multiprocessing.Queue()
-		prediction_process, game_player_processes = self.create_processes(halt_signal, lesson_queue, episode_count)
+		lesson_pipes = self.build_lesson_pipes(self.get_player_process_count())
+		prediction_process, game_player_processes = self.create_processes(lesson_pipes, halt_signal, episode_count)
 
 		prediction_process.start()
 
 		[process.start() for process in game_player_processes]
 		print('all processes started')
-		[process.join() for process in game_player_processes]
-		print('all processes completed')
 
+		[self.lessons.extend(pipe[0].recv()) for pipe in lesson_pipes]
 		halt_signal.value = 1
 
-		while not lesson_queue.empty():
-			self.lessons.append(lesson_queue.get())
+		print('all processes completed')
 
 		self.update_model()
+		print('done')
 
-	def create_processes(self, halt_signal, lesson_queue, episode_count):
-		player_process_count = multiprocessing.cpu_count() - 1
+	def create_processes(self, lesson_pipes, halt_signal, episode_count):
+		player_process_count = self.get_player_process_count()
 		prediction_requests = self.build_prediction_requests(player_process_count)
 		prediction_process = multiprocessing.Process(target = predict, args = (self.model_name, prediction_requests, halt_signal))
 		game_player_processes = []
 		episode_counts = self.build_episode_counts(episode_count, player_process_count)
 
 		for i in range(player_process_count):
-			game_player_processes.append(multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], lesson_queue, prediction_requests[i - 1])))
+			game_player_processes.append(multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], lesson_pipes[i - 1][1], prediction_requests[i - 1])))
 
 		return prediction_process, game_player_processes
+
+
+	def get_player_process_count(self):
+		return multiprocessing.cpu_count() - 1
+
+	def build_lesson_pipes(self, count):
+		lesson_pipes = []
+
+		for i in range(count):
+			parent_lesson_connection, child_lesson_connection = multiprocessing.Pipe()
+			lesson_pipes.append([parent_lesson_connection, child_lesson_connection])
+
+		return lesson_pipes
 
 	def build_episode_counts(self, episode_count, process_count):
 		counts = [episode_count // process_count] * process_count

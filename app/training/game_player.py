@@ -22,11 +22,14 @@ class MultiprocessModel:
 
 		return self.prediction_request.get_response()
 
-def play_games(episode_count, lesson_queue, prediction_request):
+def play_games(episode_count, connection, prediction_request):
 	for i in range(episode_count):
-		play_game(lesson_queue, prediction_request)
+		play_game(connection, prediction_request)
 
-def play_game(lesson_queue, prediction_request):
+	connection.send(lessons)
+	connection.close()
+
+def play_game(connection, prediction_request):
 	startTime = datetime.now()
 	global game, player1, player2
 
@@ -37,7 +40,7 @@ def play_game(lesson_queue, prediction_request):
 	while not game.is_over():
 		play_turn()
 
-	finalize_lessons(lesson_queue)
+	finalize_lessons()
 
 	print('game over', datetime.now() - startTime)
 
@@ -55,9 +58,8 @@ def make_move(move):
 	player2.move(move)
 	game.move(move)
 
-def finalize_lessons(lesson_queue):
+def finalize_lessons():
 	winner = game.get_winner()
 
 	for lesson in lessons:
 		lesson.update_winner(winner)
-		lesson_queue.put(lesson)
