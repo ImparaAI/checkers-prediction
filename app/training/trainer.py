@@ -38,7 +38,6 @@ class Trainer:
 
 	def create_processes(self, halt_signal, lesson_queue, episode_count):
 		player_process_count = multiprocessing.cpu_count() - 1
-		print(player_process_count)
 		prediction_requests = self.build_prediction_requests(player_process_count)
 		prediction_process = multiprocessing.Process(target = predict, args = (self.model_name, prediction_requests, halt_signal))
 		game_player_processes = []
