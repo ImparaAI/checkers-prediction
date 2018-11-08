@@ -10,14 +10,15 @@ import random
 
 class Player:
 
-	def __init__(self, number, game, model):
+	def __init__(self, number, game, model, prior_boards = []):
 		self.number = number
 		self.game = game
 		self.model = model
+		self.game_boards = prior_boards
 		self.montecarlo = self.build_montecarlo()
 
 	def build_montecarlo(self):
-		root_node = Node(self.game)
+		root_node = Node(deepcopy(self.game))
 		root_node.player_number = self.game.whose_turn()
 
 		montecarlo = MonteCarlo(root_node)
@@ -35,7 +36,7 @@ class Player:
 
 		return chosen_node.state.moves[-1]
 
-	def move(self, move):
+	def update_with_new_move(self, move):
 		if not self.montecarlo.root_node.expanded:
 			self.add_child_to_parent(self.montecarlo.root_node, move)
 
@@ -44,13 +45,15 @@ class Player:
 				self.montecarlo.root_node = child
 				break
 
+		self.game_boards.append(self.game.board)
+
 	def montecarlo_child_finder(self, node, montecarlo):
 		if node.state.is_over():
 			win_value = self.get_end_game_win_value(node.state, montecarlo)
 			node.update_win_value(win_value)
 			return
 
-		prediction = self.model.predict(np.array([input_builder.build(node.state)]))
+		prediction = self.model.predict(np.array([input_builder.build(node.state, self.game_boards[-8:])]))
 		is_current_player = node.state.whose_turn() == montecarlo.root_node.state.whose_turn()
 
 		node.update_win_value(prediction['win_value'] * (1 if is_current_player else -1))
@@ -63,7 +66,6 @@ class Player:
 	def add_child_to_parent(self, parent, move):
 		child = Node(deepcopy(parent.state))
 		child.state.move(move)
-		child.state.boards = []
 		child.player_number = child.state.whose_turn()
 
 		parent.add_child(child)

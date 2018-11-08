@@ -8,4 +8,4 @@ class test_initial_state(BaseTest):
 	def test_initial_state(self):
 		game = Game()
 
-		np.testing.assert_array_equal(build_input_state(game), self.build_initial_state())
+		np.testing.assert_array_equal(build_input_state(game, [game.board]), self.build_initial_state())

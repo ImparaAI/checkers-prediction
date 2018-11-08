@@ -48,15 +48,14 @@ def play_turn():
 	player = player1 if game.whose_turn() == 1 else player2
 	move = player.simulate().get_next_move()
 
-	game_boards.append(player.montecarlo.root_node.state.board)
-	lessons.append(Lesson(player.montecarlo.root_node, game_boards[-8:]))
+	lessons.append(Lesson(player.montecarlo.root_node, player.game_boards[-8:]))
 
 	make_move(move)
 
 def make_move(move):
-	player1.move(move)
-	player2.move(move)
 	game.move(move)
+	player1.update_with_new_move(move)
+	player2.update_with_new_move(move)
 
 def finalize_lessons():
 	winner = game.get_winner()

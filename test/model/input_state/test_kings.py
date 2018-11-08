@@ -7,11 +7,13 @@ class test_kings(BaseTest):
 
 	def test_kings(self):
 		game = Game()
+		boards = [game.board]
 
 		for move in self.get_moves():
 			game.move(move)
+			boards.append(game.board)
 
-		np.testing.assert_array_equal(build_input_state(game), self.build_expected())
+		np.testing.assert_array_equal(build_input_state(game, boards), self.build_expected())
 
 	def get_moves(self):
 		return [[10, 15], [23, 19], [15, 18], [22, 15], [11, 18], [19, 15], [6, 10], [15, 6], [1, 10], [24, 19], [10, 15], [19, 10], [7, 14],

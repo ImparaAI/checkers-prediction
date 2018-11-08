@@ -7,7 +7,7 @@ class InputBuilder:
 
 	def __init__(self, game, recent_boards):
 		self.game = game
-		self.recent_boards = recent_boards if recent_boards else game.boards[-8:]
+		self.recent_boards = recent_boards[-8:]
 		self.player_turn = game.whose_turn()
 		self.input = np.zeros((34, self.game.board.height, self.game.board.width), dtype = np.int)
 

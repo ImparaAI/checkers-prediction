@@ -7,16 +7,21 @@ class test_player_moves(BaseTest):
 
 	def test_one_move(self):
 		game = Game()
+		boards = [game.board]
 		game.move([9, 14])
+		boards.append(game.board)
 
-		np.testing.assert_array_equal(build_input_state(game), self.get_first_move_state())
+		np.testing.assert_array_equal(build_input_state(game, boards), self.get_first_move_state())
 
 	def test_two_moves(self):
 		game = Game()
+		boards = [game.board]
 		game.move([9, 14])
+		boards.append(game.board)
 		game.move([24, 20])
+		boards.append(game.board)
 
-		np.testing.assert_array_equal(build_input_state(game), self.get_second_move_state())
+		np.testing.assert_array_equal(build_input_state(game, boards), self.get_second_move_state())
 
 	def get_first_move_state(self):
 		input_state = self.build_initial_state()
