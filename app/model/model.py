@@ -1,5 +1,6 @@
 import numpy as np
 from . import keras_model
+from keras import backend as keras_backend
 from .hyperparameters import HyperParameters
 
 class Model:
@@ -29,3 +30,6 @@ class Model:
 
 	def save(self):
 		self.keras_model.save(self.weights_file_path)
+
+	def close(self):
+		keras_backend.clear_session()
