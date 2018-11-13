@@ -10,7 +10,7 @@ def run():
 
 	start_time = time.time()
 	storage.activate(session['id'])
-	episodes_per_training = 30
+	episodes_per_training = 100
 
 	while not time_limit_reached(start_time, session) and storage.is_active(session['id']):
 		trainer.train(session['name'], episodes_per_training)
