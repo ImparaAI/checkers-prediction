@@ -53,6 +53,6 @@ def get_latest_session():
 		return formatter.format(session)
 
 def get_all():
-	result = database.fetchall("SELECT * FROM training_sessions")
+	result = database.fetchall("SELECT * FROM training_sessions ORDER BY createdAt DESC")
 
 	return formatter.format_many(result)
