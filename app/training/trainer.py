@@ -42,7 +42,6 @@ class Trainer:
 
 		return neural_net_process, game_player_processes
 
-
 	def get_game_playing_process_count(self):
 		return multiprocessing.cpu_count() - 1
 
@@ -72,27 +71,3 @@ class Trainer:
 		manager.start()
 
 		return list(map(lambda i: manager.PredictionRequest(), range(process_count)))
-
-	def update_model(self):
-		model = checkers_model.build(self.model_name)
-		batch_size = min(self.max_batch_size, len(self.lessons) // self.preferred_batch_count)
-		random.shuffle(self.lessons)
-
-		while len(self.lessons):
-			inputs, win_values, action_probabilities = self.build_training_values(batch_size)
-			model.train(inputs, win_values, action_probabilities)
-
-		model.save()
-		model.close()
-
-	def build_training_values(self, batch_size):
-		inputs, win_values, action_probabilities = ([], [], [])
-
-		for x in range(1, batch_size):
-			if len(self.lessons):
-				lesson = self.lessons.pop()
-				inputs.append(lesson.input)
-				win_values.append(lesson.win_value)
-				action_probabilities.append(lesson.action_probabilities)
-
-		return inputs, win_values, action_probabilities
