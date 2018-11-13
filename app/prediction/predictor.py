@@ -4,6 +4,15 @@ from app.model.checkers import model as checkers_model
 
 def predict(moves, simulation_count = 5):
 	game, prior_boards = initialize_game(moves)
+
+	if game.is_over():
+		raise ValueError('The game is already over.')
+
+	possible_moves = game.get_possible_moves()
+
+	if len(possible_moves) == 1:
+		return possible_moves[0]
+
 	model = checkers_model.build()
 	player = Player(game.whose_turn(), game, model, prior_boards)
 

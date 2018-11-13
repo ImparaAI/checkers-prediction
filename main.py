@@ -12,7 +12,12 @@ app = Flask(__name__)
 def predict():
 	moves = json.loads(request.args.get('moves'))
 
-	return jsonify({'prediction': predictor.predict(moves)})
+	try:
+		move = predictor.predict(moves)
+	except ValueError as e:
+		return str(e), 400
+
+	return jsonify({'prediction': move})
 
 @app.route("/training/session", methods = ['POST'])
 def create_training_session():
