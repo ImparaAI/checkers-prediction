@@ -1,6 +1,6 @@
-from .lesson import Lesson
 from app.player import Player
 from checkers.game import Game
+from app.training.lesson import Lesson
 
 from datetime import datetime
 

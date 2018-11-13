@@ -1,7 +1,7 @@
 import random
 import multiprocessing
-from .predictor import predict
-from .game_player import play_games
+from .processes.prediction import predict
+from .processes.game_playing import play_games
 from multiprocessing.managers import BaseManager
 from .prediction_request import PredictionRequest
 from app.model.checkers import model as checkers_model
@@ -29,6 +29,8 @@ class Trainer:
 
 		[self.lessons.extend(pipe[0].recv()) for pipe in lesson_pipes]
 		halt_signal.value = 1
+
+		prediction_process.join()
 
 		print('all processes completed')
 
