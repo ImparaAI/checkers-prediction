@@ -51,6 +51,3 @@ app.teardown_appcontext(database.close_database)
 app.cli.add_command(initialize_database)
 app.cli.add_command(run_training_session)
 app.cli.add_command(test_training_session)
-
-if __name__ == '__main__':
-	app.run(host = '0.0.0.0', port = 80, debug = True)
