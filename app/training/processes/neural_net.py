@@ -7,7 +7,7 @@ lessons = []
 max_batch_size = 1024
 preferred_batch_count = 20
 
-def run(model_name, prediction_requests, lesson_pipes, halt_signal):
+def run(model_name, prediction_requests, lesson_pipes, halt_signal, lesson_signal):
 	print('neural net starting')
 	global model
 	model = checkers_model.build(model_name)
@@ -24,7 +24,8 @@ def run(model_name, prediction_requests, lesson_pipes, halt_signal):
 				prediction = model.predict(prediction_request.get_input())
 				prediction_request.set_response(prediction)
 
-		gather_new_lessons(lesson_pipes)
+		if lesson_signal.value:
+			gather_new_lessons(lesson_pipes)
 
 def gather_new_lessons(lesson_pipes):
 	for pipe in lesson_pipes:

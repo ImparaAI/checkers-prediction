@@ -33,12 +33,14 @@ class Trainer:
 		player_process_count = self.get_game_playing_process_count()
 		prediction_requests = self.build_prediction_requests(player_process_count)
 		parent_lesson_pipes, child_lesson_pipes = self.build_lesson_pipes(player_process_count)
-		neural_net_process = multiprocessing.Process(target = run_neural_net, args = (self.model_name, prediction_requests, parent_lesson_pipes, halt_signal))
+		lesson_signal = multiprocessing.Value('i', 0)
+		neural_net_process = multiprocessing.Process(target = run_neural_net, args = (self.model_name, prediction_requests, parent_lesson_pipes, halt_signal, lesson_signal))
 		game_player_processes = []
 		episode_counts = self.build_episode_counts(episode_count, player_process_count)
 
 		for i in range(player_process_count):
-			game_player_processes.append(multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], prediction_requests[i - 1], child_lesson_pipes[i - 1])))
+			process = multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], prediction_requests[i - 1], child_lesson_pipes[i - 1], lesson_signal))
+			game_player_processes.append(process)
 
 		return neural_net_process, game_player_processes
 

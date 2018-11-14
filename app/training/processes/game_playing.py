@@ -22,12 +22,13 @@ class MultiprocessModel:
 
 		return self.prediction_request.get_response()
 
-def play_games(episode_count, prediction_request, lesson_pipe):
+def play_games(episode_count, prediction_request, lesson_pipe, lesson_signal):
 	print('game playing process started')
 	for i in range(episode_count):
 		play_game(prediction_request)
 
 	lesson_pipe.send(lessons)
+	lesson_signal.value = 1
 	lesson_pipe.close()
 
 def play_game(prediction_request):
