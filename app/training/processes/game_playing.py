@@ -48,7 +48,7 @@ def play_game(prediction_request):
 
 def play_turn():
 	player = player1 if game.whose_turn() == 1 else player2
-	move = player.simulate().get_next_move()
+	move = player.simulate(20).get_next_move()
 
 	lessons.append(Lesson(player.montecarlo.root_node, player.game_boards[-8:]))
 

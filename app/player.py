@@ -26,7 +26,7 @@ class Player:
 
 		return montecarlo
 
-	def simulate(self, simulation_count = 5):
+	def simulate(self, simulation_count):
 		self.montecarlo.simulate(simulation_count)
 
 		return self
