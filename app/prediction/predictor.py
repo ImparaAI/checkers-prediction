@@ -2,7 +2,7 @@ from app.player import Player
 from checkers.game import Game
 from app.model.checkers import model as checkers_model
 
-def predict(moves, simulation_count = 5):
+def predict(moves, simulation_count = 20):
 	game, prior_boards = initialize_game(moves)
 
 	if game.is_over():
