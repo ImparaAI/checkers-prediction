@@ -1,0 +1,6 @@
+.git
+.cache
+/.idea
+*.pyc
+supervisord.log
+.pytest_cache
