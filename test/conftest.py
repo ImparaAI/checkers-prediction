@@ -8,3 +8,11 @@ def app():
 	})
 
 	return app
+
+@pytest.fixture
+def http(app):
+	return app.test_client()
+
+@pytest.fixture
+def cli(app):
+	return app.test_cli_runner()

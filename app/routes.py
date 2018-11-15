@@ -6,7 +6,13 @@ from app.training.session import restarter as training_session_restarter, fetche
 def register(app):
 	@app.route("/predict", methods = ['GET'])
 	def predict():
-		moves = json.loads(request.args.get('moves'))
+		try:
+			moves = json.loads(request.args.get('moves'))
+
+			if type(moves) != list:
+				raise TypeError
+		except TypeError as e:
+			return 'The input needs to be a json list of moves (ex: moves="[[9, 13], ...]").', 400
 
 		try:
 			move = predictor.predict(moves)
