@@ -1,11 +1,6 @@
 import numpy as np
-from . import BaseTest
-from checkers.game import Game
+from . import build_initial_state
 from app.model.checkers.input_builder import build as build_input_state
 
-class test_initial_state(BaseTest):
-
-	def test_initial_state(self):
-		game = Game()
-
-		np.testing.assert_array_equal(build_input_state(game, [game.board]), self.build_initial_state())
+def test_initial_state(game):
+	np.testing.assert_array_equal(build_input_state(game, [game.board]), build_initial_state())
