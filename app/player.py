@@ -6,8 +6,6 @@ from app.model.checkers import action_space
 from app.model.checkers import input_builder
 from montecarlo.montecarlo import MonteCarlo
 
-import random
-
 class Player:
 
 	def __init__(self, number, game, model, prior_boards = []):
