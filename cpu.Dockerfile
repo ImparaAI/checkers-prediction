@@ -21,6 +21,7 @@ RUN pip3 install -U \
 	keras \
 	flask \
 	mysqlclient \
+	pytest \
 	imparaai-checkers \
 	imparaai-montecarlo
 
