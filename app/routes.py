@@ -32,4 +32,4 @@ def register(app):
 
 	@app.route("/ping", methods = ['GET'])
 	def ping():
-		pass
+		return 'OK'
