@@ -1,27 +1,33 @@
-import MySQLdb
-from flask import current_app, g
+import flask
+import sqlite3
 
-def get_connection(connect_to_database = True):
-	if 'db' in g:
-		return g.db
+def get_connection():
+	if 'db_connection' not in flask.g:
+		connection = sqlite3.connect(flask.current_app.config['DATABASE_FILE'], detect_types = sqlite3.PARSE_DECLTYPES)
+		connection.isolation_level = None #autocommit
 
-	db = MySQLdb.connect(host = 'mysql', db = 'prediction') if connect_to_database else MySQLdb.connect(host = 'mysql')
-	db.autocommit(True)
+		flask.g.db_connection = connection
 
-	if connect_to_database:
-		g.db = db
-
-	return db
+	return flask.g.db_connection
 
 def get_cursor():
 	return get_connection().cursor()
 
-def execute(sql, args = None):
+def execute(sql, args = ()):
 	cursor = get_cursor()
 	cursor.execute(sql, args)
 	cursor.close()
 
-def fetchone(sql, args = None):
+def insert(sql, args = ()):
+	cursor = get_cursor()
+	cursor.execute(sql, args)
+
+	id = cursor.lastrowid
+	cursor.close()
+
+	return id
+
+def fetchone(sql, args = ()):
 	cursor = get_cursor()
 	cursor.execute(sql, args)
 	result = cursor.fetchone()
@@ -29,7 +35,7 @@ def fetchone(sql, args = None):
 
 	return result
 
-def fetchall(sql, args = None):
+def fetchall(sql, args = ()):
 	cursor = get_cursor()
 	cursor.execute(sql, args)
 	result = cursor.fetchall()
@@ -38,26 +44,24 @@ def fetchall(sql, args = None):
 	return result
 
 def close_database(e = None):
-	db = g.pop('db', None)
+	connection = flask.g.pop('db_connection', None)
 
-	if db is not None:
-		db.close()
+	if connection is not None:
+		connection.close()
 
 def initialize():
-	db = get_connection(connect_to_database = False)
-
 	if database_already_initialized():
 		return False
 
-	with current_app.open_resource('database/schema.sql') as f:
-		cursor = db.cursor()
-		cursor.execute(f.read().decode('utf8'))
+	with flask.current_app.open_resource('database/schema.sql') as f:
+		cursor = get_cursor()
+		cursor.executescript(f.read().decode('utf8'))
 		cursor.close()
 
 	return True
 
 def database_already_initialized():
-	cursor = get_connection(connect_to_database = False).cursor()
-	cursor.execute("SHOW DATABASES LIKE 'prediction'")
+	cursor = get_cursor()
+	cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name != 'android_metadata' AND name != 'sqlite_sequence';")
 
-	return not not cursor.fetchone()
+	return cursor.fetchone()[0] > 1

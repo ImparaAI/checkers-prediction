@@ -1,4 +1,5 @@
 import time
+import flask
 from .storage import storage
 from app.training import trainer
 
@@ -10,7 +11,7 @@ def run():
 
 	start_time = time.time()
 	storage.activate(session['id'])
-	episodes_per_training = 100
+	episodes_per_training = flask.current_app.config['TRAINING_EPISODES_PER_BATCH']
 
 	while not time_limit_reached(start_time, session) and storage.is_active(session['id']):
 		trainer.train(session['name'], episodes_per_training)

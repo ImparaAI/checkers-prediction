@@ -15,9 +15,8 @@ def get_active_session():
 
 def create_new_session(session):
 	inputs = (session['name'], session['episodeLimit'], session['secondsLimit'])
-	database.execute("INSERT INTO training_sessions (name, episodeLimit, secondsLimit) VALUES (%s, %s, %s)", inputs)
 
-	return int(database.fetchone("SELECT LAST_INSERT_ID()")[0])
+	return database.insert("INSERT INTO training_sessions (name, episodeLimit, secondsLimit) VALUES (?, ?, ?)", inputs)
 
 def get_next_session():
 	active_session = get_active_session()
@@ -33,10 +32,10 @@ def get_next_session():
 def activate(id):
 	time = datetime.datetime.now().strftime(date_format)
 
-	database.execute("UPDATE training_sessions SET startTime = %s WHERE id = %s", (time, id))
+	database.execute("UPDATE training_sessions SET startTime = ? WHERE id = ?", (time, id))
 
 def boost_episode_count(id, episodes):
-	database.execute("UPDATE training_sessions SET episodeCount = episodeCount + %s WHERE id = %s", (episodes, id))
+	database.execute("UPDATE training_sessions SET episodeCount = episodeCount + ? WHERE id = ?", (episodes, id))
 
 def is_active(id):
 	return not not database.fetchone("SELECT id FROM training_sessions WHERE deactivated = 0 AND endTime IS NULL AND startTime IS NOT NULL")
@@ -44,7 +43,7 @@ def is_active(id):
 def finish(id):
 	time = datetime.datetime.now().strftime(date_format)
 
-	database.execute("UPDATE training_sessions SET endTime = %s WHERE id = %s", (time, id))
+	database.execute("UPDATE training_sessions SET endTime = ? WHERE id = ?", (time, id))
 
 def get_latest_session():
 	session = database.fetchone("SELECT * FROM training_sessions WHERE episodeCount > 0 ORDER BY startTime DESC")

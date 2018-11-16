@@ -20,7 +20,7 @@ class Builder:
 	def build(self):
 		backend.clear_session()
 
-		if Path(self.weights_file_path).is_file():
+		if self.weights_file_path and Path(self.weights_file_path).is_file():
 			return load_model(self.weights_file_path, custom_objects = {'keras_policy_head_loss': keras_policy_head_loss})
 
 		input_layer = Input(shape = self.input_dimensions)

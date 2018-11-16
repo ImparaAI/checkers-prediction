@@ -7,7 +7,11 @@ import pytest
 ])
 def test_new_game(http, input, possible_moves):
 	response = request_with_moves(http, input)
-	response_data = json.loads(response.data.decode('utf-8'))
+
+	assert response.status_code == 200
+	assert response.is_json
+
+	response_data = response.get_json()
 
 	assert 'prediction' in response_data
 	assert response_data['prediction'] in possible_moves

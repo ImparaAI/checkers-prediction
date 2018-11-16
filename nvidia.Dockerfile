@@ -5,9 +5,9 @@ RUN apt-get update -y && apt-get upgrade -y && \
 		bash \
 		python3 \
 		python3-pip \
+		sqlite \
 		libcudnn7=7.2.1.38-1+cuda9.0 \
-		libnccl2=2.2.13-1+cuda9.0 \
-		libmysqlclient-dev && \
+		libnccl2=2.2.13-1+cuda9.0 && \
 	apt-get clean && \
 	apt-get autoremove && \
 	rm -rf /var/lib/apt/lists/* && \
@@ -20,7 +20,6 @@ RUN pip3 install -U \
 	chaussette \
 	keras==2.1 \
 	flask \
-	mysqlclient \
 	pytest \
 	imparaai-checkers \
 	imparaai-montecarlo

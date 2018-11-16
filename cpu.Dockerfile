@@ -5,7 +5,7 @@ RUN apt-get update -y && apt-get upgrade -y && \
 		bash \
 		python3 \
 		python3-pip \
-		default-libmysqlclient-dev && \
+		sqlite && \
 	apt-get clean && \
 	apt-get autoremove && \
 	rm -rf /var/lib/apt/lists/* && \
@@ -20,7 +20,6 @@ RUN pip3 install -U \
 	tensorflow \
 	keras \
 	flask \
-	mysqlclient \
 	pytest \
 	imparaai-checkers \
 	imparaai-montecarlo
