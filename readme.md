@@ -2,6 +2,8 @@ A Python Flask app that uses unsupervised learning to train a neural network to 
 
 This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster [here](https://github.com/ImparaAI/checkers-kubernetes). This app receives requests from the web app to restart the training, predict a move, or analyze previous training sessions. A mysql database is used for organizing the sessions and a cron flask script is used to perform the training runs.
 
+[![Build Status](https://travis-ci.org/ImparaAI/checkers-prediction.png?branch=master)](https://travis-ci.org/ImparaAI/checkers-prediction)
+
 # Routes
 
 ## /predict
