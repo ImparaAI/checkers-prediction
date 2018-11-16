@@ -1,5 +1,3 @@
-import datetime
-
 def format_many(sessions):
 	return list(map(lambda session: format(session), sessions))
 

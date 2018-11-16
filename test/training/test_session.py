@@ -1,42 +1,38 @@
-import json
 import pytest
 
-def test(http, cli):
-	#check_sessions(http, [])
+def test(app, http, cli):
+	check_sessions(http, [])
 
 	restart_training(http, {'secondsLimit': 1})
 
-	# check_sessions(http, [{
-	# 	'id': 1,
-	# 	'secondsLimit': 1,
-	# 	'episodeCount': 0,
-	# }])
+	check_sessions(http, [{
+		'id': 1,
+		'secondsLimit': 1,
+		'episodeCount': 0,
+	}])
 
 	response = cli.invoke(args = ['training_session:run'])
 
-	print(response.output, response.exit_code)
-	assert False
+	check_sessions(http, [{
+		'id': 1,
+		'secondsLimit': 1,
+		'episodeCount': 1,
+	}])
 
-	# check_sessions(http, [{
-	# 	'id': 1,
-	# 	'secondsLimit': 1,
-	# 	'episodeCount': 1,
-	# }])
+	restart_training(http, {'secondsLimit': 1})
 
-	# restart_training(http, {'secondsLimit': 1})
-
-	# check_sessions(http, [
-	# 	{
-	# 		'id': 1,
-	# 		'secondsLimit': 1,
-	# 		'episodeCount': 1,
-	# 	},
-	# 	{
-	# 		'id': 2,
-	# 		'secondsLimit': 1,
-	# 		'episodeCount': 0,
-	# 	},
-	# ])
+	check_sessions(http, [
+		{
+			'id': 2,
+			'secondsLimit': 1,
+			'episodeCount': 0,
+		},
+		{
+			'id': 1,
+			'secondsLimit': 1,
+			'episodeCount': 1,
+		},
+	])
 
 def check_sessions(http, expected_sessions):
 	response = http.get('/training/sessions')
@@ -51,7 +47,7 @@ def check_sessions(http, expected_sessions):
 	if not expected_sessions:
 		assert response_data['sessions'] == expected_sessions
 		return
-	print(response_data['sessions'])
+
 	assert len(expected_sessions) == len(response_data['sessions'])
 
 	for i, expected_session in enumerate(expected_sessions):
