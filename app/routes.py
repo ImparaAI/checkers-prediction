@@ -29,3 +29,7 @@ def register(app):
 	@app.route("/training/sessions", methods = ['GET'])
 	def get_training_sessions():
 		return jsonify({'sessions': training_session_fetcher.get_all()})
+
+	@app.route("/ping", methods = ['GET'])
+	def ping():
+		pass
