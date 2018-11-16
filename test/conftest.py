@@ -11,6 +11,7 @@ def app():
 		'TESTING': True,
 		'DATABASE_FILE': db_file_path,
 		'TRAINING_EPISODES_PER_BATCH': 1,
+		'TRAINING_SIMULATION_DEPTH': 1,
 	})
 
 	with app.app_context():

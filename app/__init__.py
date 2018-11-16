@@ -20,6 +20,7 @@ def load_config(app, config):
 		SECRET_KEY = 'dev',
 		DATABASE_FILE = os.path.join(app.instance_path, 'sqlite', 'prediction.db'),
 		TRAINING_EPISODES_PER_BATCH = 100,
+		TRAINING_SIMULATION_DEPTH = 10,
 	)
 
 	if config is None:

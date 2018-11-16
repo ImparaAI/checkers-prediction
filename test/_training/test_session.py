@@ -1,6 +1,6 @@
 import pytest
 
-def test(app, http, cli):
+def test(http, cli):
 	check_sessions(http, [])
 
 	restart_training(http, {'secondsLimit': 1})

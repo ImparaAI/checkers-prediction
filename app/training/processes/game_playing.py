@@ -22,16 +22,17 @@ class MultiprocessModel:
 
 		return self.prediction_request.get_response()
 
-def play_games(episode_count, prediction_request, lesson_pipe, lesson_signal):
+def play_games(episode_count, prediction_request, lesson_pipe, lesson_signal, simulation_depth):
 	print('game playing process started')
+
 	for i in range(episode_count):
-		play_game(prediction_request)
+		play_game(prediction_request, simulation_depth)
 
 	lesson_signal.value = 1
 	lesson_pipe.send(lessons)
 	lesson_pipe.close()
 
-def play_game(prediction_request):
+def play_game(prediction_request, simulation_depth):
 	startTime = datetime.now()
 	global game, player1, player2
 
@@ -40,15 +41,15 @@ def play_game(prediction_request):
 	player2 = Player(2, game, MultiprocessModel(prediction_request))
 
 	while not game.is_over():
-		play_turn()
+		play_turn(simulation_depth)
 
 	finalize_lessons()
 
 	print('game over', datetime.now() - startTime)
 
-def play_turn():
+def play_turn(simulation_depth):
 	player = player1 if game.whose_turn() == 1 else player2
-	move = player.simulate(20).get_next_move()
+	move = player.simulate(simulation_depth).get_next_move()
 
 	lessons.append(Lesson(player.montecarlo.root_node, player.game_boards[-8:]))
 

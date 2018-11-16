@@ -1,3 +1,4 @@
+import flask
 import multiprocessing
 from .processes.game_playing import play_games
 from multiprocessing.managers import BaseManager
@@ -39,7 +40,10 @@ class Trainer:
 		episode_counts = self.build_episode_counts(episode_count, player_process_count)
 
 		for i in range(player_process_count):
-			process = multiprocessing.Process(target = play_games, args = (episode_counts[i - 1], prediction_requests[i - 1], child_lesson_pipes[i - 1], lesson_signal))
+			process = multiprocessing.Process(
+				target = play_games,
+				args = (episode_counts[i - 1], prediction_requests[i - 1], child_lesson_pipes[i - 1], lesson_signal, flask.current_app.config['TRAINING_SIMULATION_DEPTH'])
+			)
 			game_player_processes.append(process)
 
 		return neural_net_process, game_player_processes
