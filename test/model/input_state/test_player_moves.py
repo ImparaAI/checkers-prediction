@@ -1,20 +1,14 @@
 import numpy as np
-from . import build_initial_state
+from . import build_initial_state, play_moves
 from app.model.checkers.input_builder import build as build_input_state
 
 def test_one_move(game):
-	boards = [game.board]
-	game.move([9, 14])
-	boards.append(game.board)
+	boards = play_moves(game, [[9, 14]])
 
 	np.testing.assert_array_equal(build_input_state(game, boards), get_first_move_state())
 
 def test_two_moves(game):
-	boards = [game.board]
-	game.move([9, 14])
-	boards.append(game.board)
-	game.move([24, 20])
-	boards.append(game.board)
+	boards = play_moves(game, [[9, 14], [24, 20]])
 
 	np.testing.assert_array_equal(build_input_state(game, boards), get_second_move_state())
 
@@ -40,7 +34,7 @@ def get_first_move_state():
 	#player turn
 	input_state[32] = np.ones((8, 4), dtype = np.int)
 
-	#move count
+	#one move without capture
 	input_state[33][7][3] = 1
 
 	return input_state
@@ -76,7 +70,7 @@ def get_second_move_state():
 		[0, 0, 0, 0]
 	]
 
-	#two move count
+	#two moves without capture
 	input_state[33][7][2] = 1
 	input_state[33][7][3] = 0
 

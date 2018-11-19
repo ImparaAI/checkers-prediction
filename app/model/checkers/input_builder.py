@@ -21,7 +21,7 @@ class InputBuilder:
 			self.input[board_index + 24] = board_planes[3]
 
 		self.input[32] = self.build_player_turn(self.game.board)
-		self.input[33] = self.build_move_count(self.game.board, len(self.game.moves))
+		self.input[33] = self.build_consecutive_noncapture_move_count(self.game.board, self.game.moves_since_last_capture)
 
 		return self.input
 
@@ -49,7 +49,7 @@ class InputBuilder:
 
 		return np.ones((board.height, board.width), dtype = np.int)
 
-	def build_move_count(self, board, move_count):
+	def build_consecutive_noncapture_move_count(self, board, move_count):
 		move_state = self.convert_to_binary_array(move_count, board.height * board.width)
 
 		return np.reshape(move_state, (board.height, board.width))

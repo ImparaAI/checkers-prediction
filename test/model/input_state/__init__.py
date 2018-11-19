@@ -22,3 +22,12 @@ def build_initial_state():
 	                   [0, 0, 0, 0]]
 
 	return input_state
+
+def play_moves(game, moves):
+	boards = [game.board]
+
+	for move in moves:
+		game.move(move)
+		boards.append(game.board)
+
+	return boards

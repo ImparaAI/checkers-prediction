@@ -1,12 +1,9 @@
 import numpy as np
+from . import play_moves
 from app.model.checkers.input_builder import build as build_input_state
 
 def test_kings(game):
-	boards = [game.board]
-
-	for move in get_moves():
-		game.move(move)
-		boards.append(game.board)
+	boards = play_moves(game, get_moves())
 
 	np.testing.assert_array_equal(build_input_state(game, boards), build_expected())
 
@@ -314,13 +311,13 @@ def build_expected():
 		 [1, 1, 1, 1],
 		 [1, 1, 1, 1],
 		 [1, 1, 1, 1]],
-		#move count
+		#move count since last capture
 		[[0, 0, 0, 0],
 		 [0, 0, 0, 0],
 		 [0, 0, 0, 0],
 		 [0, 0, 0, 0],
 		 [0, 0, 0, 0],
 		 [0, 0, 0, 0],
-		 [0, 0, 0, 1],
-		 [1, 1, 1, 1]],
+		 [0, 0, 0, 0],
+		 [0, 0, 0, 1]],
 	]
