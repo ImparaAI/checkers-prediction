@@ -1,7 +1,7 @@
 import click
 from app.database import database
 from flask.cli import with_appcontext
-from app.training.session import runner as training_session_runner
+from app.training.session import restarter as training_session_restarter, runner as training_session_runner
 
 def register(app):
 	@click.command('database:initialize')
