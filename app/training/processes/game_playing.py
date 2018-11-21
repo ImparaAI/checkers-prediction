@@ -45,7 +45,7 @@ def play_game(prediction_request, simulation_depth):
 
 	finalize_lessons()
 
-	print('game over', datetime.now() - startTime)
+	print('game over', datetime.now() - startTime, len(game.moves), 'moves')
 
 def play_turn(simulation_depth):
 	player = player1 if game.whose_turn() == 1 else player2
