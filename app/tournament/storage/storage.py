@@ -4,8 +4,8 @@ from app.database import database
 
 date_format = '%Y-%m-%d %H:%M:%S'
 
-def create(player1, player2, episodeCount):
-	inputs = (player1, player2, episodeCount)
+def create(player1, player2, episode_count):
+	inputs = (player1, player2, episode_count)
 
 	database.execute("DELETE FROM tournaments where 1")
 	return database.insert("INSERT INTO tournaments (player1, player2, episodeCount) VALUES (?, ?, ?)", inputs)

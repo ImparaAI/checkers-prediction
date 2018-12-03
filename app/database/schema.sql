@@ -17,11 +17,21 @@ CREATE TABLE IF NOT EXISTS tournaments (
   player1 varchar(100) NOT NULL,
   player2 varchar(100) NOT NULL,
   episodeCount int unsigned NOT NULL DEFAULT 0,
-  player1_win_count int unsigned NOT NULL DEFAULT 0,
-  player2_win_count int unsigned NOT NULL DEFAULT 0,
-  draw_count int unsigned NOT NULL DEFAULT 0,
+  player1WinCount int unsigned NOT NULL DEFAULT 0,
+  player2WinCount int unsigned NOT NULL DEFAULT 0,
+  drawCount int unsigned NOT NULL DEFAULT 0,
   startTime datetime NULL DEFAULT NULL,
   endTime datetime NULL DEFAULT NULL,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS tournament_games (
+  id INTEGER PRIMARY KEY,
+  tournamentId int unsigned NOT NULL,
+  moves text NULL DEFAULT NULL,
+  startTime datetime NULL DEFAULT NULL,
+  endTime datetime NULL DEFAULT NULL,
+  createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 COMMIT;
