@@ -9,5 +9,4 @@ def build(model_name = None):
 	if session or model_name:
 		filename = os.path.join(os.path.dirname(__file__), 'data/' + (model_name if model_name else session['name']) + '.h5')
 
-	print('weights file path', session, filename)
 	return Model(filename, (34, 8, 4), 8 * 8 * 4)
