@@ -3,6 +3,7 @@ FROM tensorflow/tensorflow:latest-gpu-py3
 RUN apt-get update -y && apt-get upgrade -y && \
 	apt-get install -y --allow-downgrades \
 		bash \
+		cron \
 		python3 \
 		python3-pip \
 		sqlite \
@@ -27,12 +28,16 @@ RUN pip3 install -U \
 COPY docker/conf/circus.ini /etc/circus/circus.ini
 COPY docker/conf/.bashrc /root/.bashrc
 COPY docker/start.sh /bin/original_start.sh
+COPY docker/crontab /var/cron
 
 RUN ln -snf /bin/bash /bin/sh && \
 	find /usr/lib/python3 -name __pycache__ | xargs rm -r && \
 	sed -i -e 's/\r$//' /root/.bashrc && \
 	tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
-	chmod -R 700 /bin/start.sh
+	chmod -R 700 /bin/start.sh && \
+	sed -i -e 's/\r$//' /var/cron && \
+    chmod 0755 /var/cron && \
+    /usr/bin/crontab /var/cron
 
 COPY . /var/app
 

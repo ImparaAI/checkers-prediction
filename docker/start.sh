@@ -11,6 +11,12 @@ done
 
 echo "Database initialized"
 
+echo "Starting cron"
+cron
+echo "Cron started"
+
 touch /var/healthy
 
 circusd /etc/circus/circus.ini
+
+echo "Container started"
