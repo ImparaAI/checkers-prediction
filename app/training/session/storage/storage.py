@@ -1,4 +1,3 @@
-import datetime
 from . import formatter
 from app.database import database
 
@@ -30,20 +29,16 @@ def get_next_session():
 		return formatter.format(session)
 
 def activate(id):
-	time = datetime.datetime.now().strftime(date_format)
-
-	database.execute("UPDATE training_sessions SET startTime = ? WHERE id = ?", (time, id))
+	database.execute("UPDATE training_sessions SET startTime = ? WHERE id = ?", (database.get_current_time(), id))
 
 def boost_episode_count(id, episodes):
-	database.execute("UPDATE training_sessions SET episodeCount = episodeCount + ? WHERE id = ?", (episodes, id))
+	database.execute("UPDATE training_sessions SET episodeCount = episodeCount + ?, latestLessonTime = ? WHERE id = ?", (episodes, database.get_current_time(), id))
 
 def is_active(id):
 	return not not database.fetchone("SELECT id FROM training_sessions WHERE deactivated = 0 AND endTime IS NULL AND startTime IS NOT NULL")
 
 def finish(id):
-	time = datetime.datetime.now().strftime(date_format)
-
-	database.execute("UPDATE training_sessions SET endTime = ? WHERE id = ?", (time, id))
+	database.execute("UPDATE training_sessions SET endTime = ? WHERE id = ?", (database.get_current_time(), id))
 
 def get_latest_session():
 	session = database.fetchone("SELECT * FROM training_sessions WHERE episodeCount > 0 ORDER BY startTime DESC")
@@ -55,3 +50,4 @@ def get_all():
 	result = database.fetchall("SELECT * FROM training_sessions ORDER BY createdAt DESC")
 
 	return formatter.format_many(result)
+

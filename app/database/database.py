@@ -1,5 +1,6 @@
 import flask
 import sqlite3
+from datetime import datetime
 
 def get_connection():
 	if 'db_connection' not in flask.g:
@@ -65,3 +66,6 @@ def database_already_initialized():
 	cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name != 'android_metadata' AND name != 'sqlite_sequence';")
 
 	return cursor.fetchone()[0] > 1
+
+def get_current_time():
+	return datetime.now().strftime('%Y-%m-%d %H:%M:%S')

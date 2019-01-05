@@ -11,5 +11,6 @@ def format(session):
 		'deactivated': bool(session[5]),
 		'startTime': session[6],
 		'endTime': session[7],
-		'createdAt': session[8],
+		'latestLessonTime': session[8],
+		'createdAt': session[9].isoformat() if session[9] else None,
 	}

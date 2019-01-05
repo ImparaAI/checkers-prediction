@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS training_sessions (
   deactivated tinyint NOT NULL DEFAULT 0,
   startTime datetime NULL DEFAULT NULL,
   endTime datetime NULL DEFAULT NULL,
+  latestLessonTime datetime NULL DEFAULT NULL,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX IF NOT EXISTS training_sessions_time ON training_sessions (startTime, endTime, deactivated);
